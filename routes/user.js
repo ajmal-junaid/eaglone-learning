@@ -14,11 +14,15 @@ router.post('/user-signup', verifyApiKey, async (req, res) => {
 
         console.log("new user");
         const newUser = await User.create(req.body);
-        res.status(200).json({ err: true, message: "Acoount Created Successfully", userData: newUser });
+        res.status(200).json({ message: "Acoount Created Successfully", userData: newUser });
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({ err: true, message: "something went wrong" });
     }
+})
+
+router.get('/nandu',(req,res)=>{
+    res.status(200).json({message:"API is working"})
 })
 
 
