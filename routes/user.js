@@ -21,8 +21,28 @@ router.post('/user-signup', verifyApiKey, async (req, res) => {
     }
 })
 
-router.get('/nandu',(req,res)=>{
-    res.status(200).json({message:"API is working"})
+router.post('/user-login', verifyApiKey, async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.body.email});
+        console.log(user);
+        if(user){
+            const result = await bcrypt.compare(req.body.password,user.password);
+            if (result){
+                //jwt token
+                return res.status(200).json({login:true})
+            }else{
+                return res.status(400).json({err:true,message:"wrong password"})
+            }
+        }else{
+            return res.status(400).json({err:true,message:"user not found"})
+        }
+    } catch (error) {
+            return res.status(500).json({err:true,message:"Something went wrong"})
+    }
+})
+
+router.get('/nandu', (req, res) => {
+    res.status(200).json({ message: "podaaaaaaaaaaaaaaaaaaaaaaaaaaaa" })
 })
 
 
