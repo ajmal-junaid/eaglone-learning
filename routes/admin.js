@@ -13,3 +13,5 @@ router.get('/',(req,res)=>{
 
 
 module.exports = router
+
+//connect mongodb in node
