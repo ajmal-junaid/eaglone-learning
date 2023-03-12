@@ -1,23 +1,22 @@
 const bcrypt = require('bcrypt');
 require('dotenv').config();
+const Jwt = require('jsonwebtoken')
+
 module.exports = {
     verifyApiKey: (req, res, next) => {
         try {
-            let apikey = req.headers['api-key']
+            let apikey = req.headers['apikey']
             if (apikey) {
                 apikey = apikey.split(" ")[1]
                 bcrypt.compare(process.env.VERIFY_KEY, apikey, function (error, result) {
                     if (error) {
+                        console.log(process.env.JWT_TOKEN);
                         res.status(400).json({ err: true, message: "Unexpected Error on Hashing", reason: error })
                     }
                     if (result) {
-                        console.log("successs");
                         next()
-                    } else {
-                        res.status(400).json({ err: true, message: "Invalid API-KEY" });
-                        console.log("err");
                     }
-                });
+                })
             } else {
                 res.status(400).json({ err: true, message: "API-KEY not found" })
             }
@@ -28,14 +27,23 @@ module.exports = {
 
     verifyUser: (req, res, next) => {
         try {
-            let token = req.headers['user-token']
+            let token = req.headers['authorization']
             if (token) {
                 token = token.split(" ")[1]
+                Jwt.verify(token, process.env.JWT_TOKEN, (err, success) => {
+                    if (err) {
+                        res.status(400).json({ err: true, message: "User Not Authorized", err })
+                    } else {
+                        next()
+                    }
+                })
                 console.log(token, "Gottttttttttttt");
+            } else {
+                res.status(400).json({ err: true, message: "Token not exists" })
             }
-            next()
         } catch (error) {
             console.log(error);
+            res.status(400).json({ err: true, message: "Unexpected errot",err:error })
         }
     }
 

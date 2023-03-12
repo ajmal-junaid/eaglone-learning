@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const connection = require("../utils/database");
+const Jwt= require('jsonwebtoken')
 
 const userSchema = new mongoose.Schema({
     name:{
@@ -17,8 +18,17 @@ const userSchema = new mongoose.Schema({
     password:{
         type:String,
         required:true
+    },
+    active:{
+        type:Boolean,
+        required:true
     }
 });
+
+userSchema.methods.generateAuthToken = ()=>{
+    const token=Jwt.sign({_id:this._id},process.env.JWT_TOKEN,{expiresIn:"180000"})
+    return token;
+}
 
 const User = connection.model("User",userSchema);
 module.exports = User;
