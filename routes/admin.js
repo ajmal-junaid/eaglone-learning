@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { sample, adminLogin, getAllUsers } = require('../controllers/admin');
-const { addCategory } = require('../controllers/category')
 const multer = require("multer");
+const { sample, adminLogin, getAllUsers } = require('../controllers/admin');
+const { addCategory, getCategory } = require('../controllers/category')
+const { addCourse, getAllCourses } = require('../controllers/course');
 
-
-// Define storage for the uploaded files
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "public/images");
@@ -15,11 +14,7 @@ const storage = multer.diskStorage({
         cb(null, file.fieldname + "-" + uniqueSuffix + "." + file.originalname.split(".").pop());
     },
 });
-
-// Initialize multer with the storage configuration
 const upload = multer({ storage: storage });
-
-
 
 
 router.get('/', sample)
@@ -29,6 +24,12 @@ router.post('/login', adminLogin);
 router.get('/users', getAllUsers);
 
 router.post("/add-category", upload.single("image"), addCategory);
+
+router.get('/categories', getCategory)
+
+router.post("/add-course",upload.single('image'),addCourse);
+
+router.get('/courses',getAllCourses)
 
 
 
