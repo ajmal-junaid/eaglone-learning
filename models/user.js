@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
     active:{
         type:Boolean,
         required:true
+    },
+    otp:{
+        type:String,
+        required:false
     }
 });
 

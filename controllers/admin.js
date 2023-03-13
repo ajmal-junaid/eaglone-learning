@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt')
 const Admin = require('../models/admin')
 const User = require('../models/user')
+const Jwt = require('jsonwebtoken')
+const jwtKey = process.env.JWT_TOKEN
 module.exports = {
     adminLogin: async (req, res) => {
         try {
@@ -9,8 +11,12 @@ module.exports = {
             if (admin) {
                 const isPassword = await bcrypt.compare(req.body.password, admin.password);
                 if (isPassword) {
-                    const admToken = admin.generateAuthToken();
-                    return res.status(200).json({ login: true, message: "login success", admToken,adminMail:admin.email })
+                    // const admToken = admin.generateAuthToken();
+                    Jwt.sign({ admin }, jwtKey, { expiresIn: 86400 }, (err, token) => {
+                        if (err) return res.status(212).json({ err: true, message: "error in token generation" })
+                        if (token) return res.status(200).json({ auth: true, token: token, message: "Logged In Succesfully",adminMail:admin.email })
+                    })
+                    // return res.status(200).json({ login: true, message: "login success", admToken,adminMail:admin.email })
                 } else {
                     return res.status(200).json({ err: true, message: "wrong password" })
                 }
