@@ -9,10 +9,5 @@ router.post('/verify-email',verifyEmail)
 
 router.post('/user-login',userLogin)
 
-router.get('/nandu', (req, res) => {
-    res.status(200).json({ message: "podaaaaaaaaaaaaaaaaaaaaaaaaaaaa" })
-})
-
-
 
 module.exports = router
