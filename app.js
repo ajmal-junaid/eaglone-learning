@@ -8,9 +8,8 @@ require('dotenv').config();
 const userRoutes = require('./routes/user')
 const adminRoutes = require('./routes/admin')
 const { verifyApiKey } = require('./middlewares/verifications')
-//app.use(verifyApiKey)
-
 app.use('/', userRoutes)
 app.use('/admin', adminRoutes)
-app.listen(3000, '192.168.48.218');
-//app.listen(3000);
+app.listen(3000, '192.168.52.174'); //space ip
+// app.listen(3000, '192.168.91.60'); //mobile ip
+//app.listen(3000); 

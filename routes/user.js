@@ -9,5 +9,4 @@ router.post('/verify-email',verifyEmail)
 
 router.post('/user-login',userLogin)
 
-
 module.exports = router

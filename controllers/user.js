@@ -46,11 +46,12 @@ module.exports = {
             if (userPhone) return res.status(212).json({ err: true, message: "This Phone Is Already Registered" });
             req.body.password = await bcrypt.hash(req.body.password, 10);
             const otp = Math.floor(100000 + Math.random() * 900000);
-            req.body.otp=otp;
-           
+            req.body.otp = otp;
+
             const transporter = nodemailer.createTransport({
-                host: 'smtp.ethereal.email',
+                host: 'smtp.gmail.com',
                 port: 587,
+                secure: false,
                 auth: {
                     user: process.env.YOUR_EMAIL,
                     pass: process.env.YOUR_PASSWORD
@@ -67,7 +68,7 @@ module.exports = {
             transporter.sendMail(mailOptions, async (error, info) => {
                 if (error) {
                     console.log(error);
-                    res.json({err:true, success: false, message: "Failed to send OTP." });
+                    res.json({ err: true, success: false, message: "Failed to send OTP." });
                 } else {
                     const newUser = await User.create(req.body);
                     console.log("Email sent: " + info.response);
@@ -75,25 +76,25 @@ module.exports = {
                 }
             });
         } catch (error) {
-            console.log(error.message,"catch");
+            console.log(error.message, "catch");
             return res.status(300).json({ err: true, message: "something went wrong" });
         }
     },
     verifyEmail: async (req, res) => {
         try {
             const { email, otp } = req.body;
-            
+
             const user = await User.findOne({ email });
             if (!user) {
-                return res.status(200).json({err:true, message: 'User not found' });
+                return res.status(200).json({ err: true, message: 'User not found' });
             }
             if (otp !== user.otp) {
-                return res.status(200).json({err:true, message: 'Invalid OTP' });
+                return res.status(200).json({ err: true, message: 'Invalid OTP' });
             }
             user.active = true;
             user.otp = undefined;
             await user.save();
-            res.status(200).json({success:true, message: 'Email verified successfully' });
+            res.status(200).json({ success: true, message: 'Email verified successfully' });
         } catch (error) {
             console.error(error);
             res.status(300).json({ err: true, message: "Something went wrong", reason: error })
