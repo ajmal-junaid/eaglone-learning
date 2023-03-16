@@ -14,7 +14,6 @@ module.exports = {
             req.body.image = imageUrl;
             req.body.coursecount = 0;
             const success = await Category.create(req.body)
-            console.log(success);
             if (success) return res.status(201).json({ message: "Category Added Succesfully" })
             return res.status(201).json({ err: true, message: "Category Creation Failed" })
         } catch (error) {
@@ -73,5 +72,3 @@ module.exports = {
         }
     }
 }
-
-// node mailer
