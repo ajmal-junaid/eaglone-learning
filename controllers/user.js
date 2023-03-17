@@ -38,13 +38,16 @@ module.exports = {
     //     }
     // },
     userSignup: async (req, res) => {
+        console.log(req.body);
         try {
+            console.log(req.body,"try");
             const { email, mobile, name } = req.body;
             const userEmail = await User.findOne({ email: email });
             const userPhone = await User.findOne({ mobile: mobile });
             if (userEmail) return res.status(212).json({ err: true, message: "This Email Is Already Registered" });
             if (userPhone) return res.status(212).json({ err: true, message: "This Phone Is Already Registered" });
             req.body.password = await bcrypt.hash(req.body.password, 10);
+            req.body.active=false;
             const otp = Math.floor(100000 + Math.random() * 900000);
             req.body.otp = otp;
 
@@ -113,10 +116,10 @@ module.exports = {
                         if (token) return res.status(200).json({ auth: true, token: token, message: "Logged In Succesfully" })
                     })
                 } else {
-                    return res.status(200).json({ err: true, message: "wrong password" })
+                    return res.status(205).json({ err: true, message: "wrong password" })
                 }
             } else {
-                return res.status(200).json({ err: true, message: "user not found" })
+                return res.status(204).json({ err: true, message: "user not found" })
             }
         } catch (error) {
             return res.status(300).json({ err: true, message: "Something went wrong", reason: error })

@@ -5,24 +5,26 @@ const jwtKey = process.env.JWT_TOKEN
 
 module.exports = {
     verifyApiKey: (req, res, next) => {
+        console.log(req.headers['apikey']);
         try {
             let apikey = req.headers['apikey']
+            console.log(apikey)
             if (apikey) {
                 apikey = apikey.split(" ")[1]
                 bcrypt.compare(process.env.VERIFY_KEY, apikey, function (error, result) {
                     if (error) {
                         console.log(process.env.JWT_TOKEN);
-                        res.status(400).json({ err: true, message: "Unexpected Error on Hashing", reason: error })
+                        res.status(203).json({ err: true, message: "Unexpected Error on Hashing", reason: error })
                     }
                     if (result) {
                         next()
                     }
                 })
             } else {
-                res.status(400).json({ err: true, message: "API-KEY not found" })
+                res.status(204).json({ err: true, message: "API-KEY not found" })
             }
         } catch (errorr) {
-            res.status(500).json({ err: true, message: "unexpected API-KEY", reason: errorr })
+            res.status(203).json({ err: true, message: "unexpected API-KEY", reason: errorr })
         }
     },
 

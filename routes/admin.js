@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const multer = require("multer");
-const { sample, adminLogin, getAllUsers } = require('../controllers/admin');
+const { adminLogin, getAllUsers } = require('../controllers/admin');
 const { addCategory, getCategory, getCategoryById, updateCategoryById, deleteCategoryById } = require('../controllers/category')
 const { addCourse, getAllCourses, getCourseById, updateCourseById } = require('../controllers/course');
 const { verifyUser } = require('../middlewares/verifications');
@@ -16,10 +16,7 @@ const storage = multer.diskStorage({
     },
 });
 const upload = multer({ storage: storage });
-
-
-router.get('/', sample)
-
+ 
 router.post('/login', adminLogin);
 
 router.get('/users', getAllUsers);
@@ -50,5 +47,3 @@ router.delete('/delete-category/:id',deleteCategoryById)
 
 
 module.exports = router
-
-//connect mongodb in node

@@ -7,7 +7,6 @@ module.exports = {
     },
     addCourse: async (req, res) => {
         try {
-            console.log("bodyyyy", req.body);
             let { courseId, title, category, premium } = req.body;
             if (!courseId || !title || !category || !premium) return res.status(206).json({ err: true, message: "Enter all required fields" })
             req.body.courseId = courseId.toLowerCase()
