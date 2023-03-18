@@ -25,7 +25,9 @@ const userSchema = new mongoose.Schema({
     },
     otp:{
         type:String,
-        required:false
+        required:false,
+        expires: '5m'
+
     }
 });
 

@@ -5,6 +5,9 @@ const jwtKey = process.env.JWT_TOKEN
 
 module.exports = {
     verifyApiKey: (req, res, next) => {
+        if (req.path === '/test') {
+            next();
+          }
         console.log(req.headers['apikey']);
         try {
             let apikey = req.headers['apikey']
