@@ -4,50 +4,18 @@ const Jwt = require('jsonwebtoken')
 const jwtKey = process.env.JWT_TOKEN
 const nodemailer = require('nodemailer');
 
-
 module.exports = {
-    // userSignup: async (req, res) => {
-    //     try {
-    //         const userEmail = await User.findOne({ email: req.body.email });
-    //         const userPhone = await User.findOne({ mobile: req.body.mobile });
-    //         if (userEmail) return res.status(200).json({ err: true, message: "This Email Is Already Registered" });
-    //         if (userPhone) return res.status(200).json({ err: true, message: "This Phone Is Already Registered" });
-    //         req.body.password = await bcrypt.hash(req.body.password, 10);
-    //         req.body.otp = Math.floor(100000 + Math.random() * 900000); //otp generation
-    //         const newUser = await User.create(req.body);
-
-    //         const transporter = nodemailer.createTransport({
-    //             service: 'gmail',
-    //             auth: {
-    //                 user: process.env.EMAIL_USER,
-    //                 pass: process.env.EMAIL_PASS
-    //             }
-    //         });
-    //         const mailOptions = {
-    //             from: process.env.EMAIL_USER,
-    //             to: email,
-    //             subject: 'Verify your email address',
-    //             html: `<p>Your OTP for email verification is <strong>${otp}</strong></p>`
-    //         };
-    //         await transporter.sendMail(mailOptions);
-
-    //         res.status(200).json({ otpsent: true, message: "Acoount Created Successfully, Please Verify your Email", userData: newUser });
-    //     } catch (error) {
-    //         console.log(error.message);
-    //         return res.status(300).json({ err: true, message: "something went wrong" });
-    //     }
-    // },
     userSignup: async (req, res) => {
         console.log(req.body);
         try {
-            console.log(req.body,"try");
+            console.log(req.body, "try");
             const { email, mobile, name } = req.body;
             const userEmail = await User.findOne({ email: email });
             const userPhone = await User.findOne({ mobile: mobile });
             if (userEmail) return res.status(212).json({ err: true, message: "This Email Is Already Registered" });
             if (userPhone) return res.status(212).json({ err: true, message: "This Phone Is Already Registered" });
             req.body.password = await bcrypt.hash(req.body.password, 10);
-            req.body.active=false;
+            req.body.active = false;
             const otp = Math.floor(100000 + Math.random() * 900000);
             req.body.otp = otp;
 
@@ -89,15 +57,19 @@ module.exports = {
 
             const user = await User.findOne({ email });
             if (!user) {
-                return res.status(200).json({ err: true, message: 'User not found' });
+                return res.status(203).json({ err: true, message: 'User not found' });
             }
             if (otp !== user.otp) {
-                return res.status(200).json({ err: true, message: 'Invalid OTP' });
+                return res.status(203).json({ err: true, message: 'Invalid OTP or Otp expired' });
             }
             user.active = true;
             user.otp = undefined;
             await user.save();
-            res.status(200).json({ success: true, message: 'Email verified successfully' });
+            Jwt.sign({ user }, jwtKey, { expiresIn: 86400 }, (err, token) => {
+                if (err) return res.status(212).json({ err: true, message: "error in token generation" })
+                console.log(token, err);
+                if (token) return res.status(200).json({ auth: true, token, success: true, message: "Email verified successfully" })
+            })
         } catch (error) {
             console.error(error);
             res.status(300).json({ err: true, message: "Something went wrong", reason: error })

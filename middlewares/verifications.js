@@ -4,20 +4,18 @@ const Jwt = require('jsonwebtoken')
 const jwtKey = process.env.JWT_TOKEN
 
 module.exports = {
-    verifyApiKey: (req, res, next) => {
+    verifyApiKey: async (req, res, next) => {
         if (req.path === '/test') {
             next();
-          }
-        console.log(req.headers['apikey']);
+        }
         try {
-            let apikey = req.headers['apikey']
-            console.log(apikey)
+            let apikey = await req.headers['apikey']
             if (apikey) {
                 apikey = apikey.split(" ")[1]
-                bcrypt.compare(process.env.VERIFY_KEY, apikey, function (error, result) {
+                bcrypt.compare(process.env.VERIFY_KEY, apikey, (error, result) => {
                     if (error) {
-                        console.log(process.env.JWT_TOKEN);
-                        res.status(203).json({ err: true, message: "Unexpected Error on Hashing", reason: error })
+                        console.log(process.env.JWT_TOKEN, error);
+                        res.status(203).json({ err: true, message: "Wrong Api Key", error })
                     }
                     if (result) {
                         next()
@@ -39,11 +37,11 @@ module.exports = {
                 Jwt.verify(token, jwtKey, (err, decoded) => {
                     if (err) {
                         if (err.name === 'JsonWebTokenError') {
-                            return res.status(203).json({ err: true, message: "Invalid Token", reason: err.name })
+                            return res.status(401).json({ err: true, message: "Invalid Token", reason: err.name })
                         } else if (err.name === 'TokenExpiredError') {
-                            return res.status(203).json({ err: true, message: "token has expired", reason: err.name })
+                            return res.status(401).json({ err: true, message: "token has expired", reason: err.name })
                         } else {
-                            return res.status(203).json({ err: true, message: "some other error occurred", reason: err })
+                            return res.status(401).json({ err: true, message: "some other error occurred", reason: err })
                         }
                     } else {
                         next()
