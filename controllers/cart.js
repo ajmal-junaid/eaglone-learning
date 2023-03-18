@@ -1,4 +1,3 @@
-const Cart = require('../models/cart');
 const User = require('../models/user')
 const ObjectId = require("mongodb").ObjectId;
 
