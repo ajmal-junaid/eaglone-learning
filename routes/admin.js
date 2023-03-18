@@ -5,17 +5,7 @@ const { adminLogin, getAllUsers } = require('../controllers/admin');
 const { addCategory, getCategory, getCategoryById, updateCategoryById, deleteCategoryById } = require('../controllers/category')
 const { addCourse, getAllCourses, getCourseById, updateCourseById } = require('../controllers/course');
 const { verifyUser } = require('../middlewares/verifications');
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "public/images");
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-        cb(null, file.fieldname + "-" + uniqueSuffix + "." + file.originalname.split(".").pop());
-    },
-});
-const upload = multer({ storage: storage });
+const upload = require('../utils/multer')
  
 router.post('/login', adminLogin);
 
