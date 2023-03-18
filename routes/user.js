@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { verifyUser } = require('../middlewares/verifications')
 const { userLogin, userSignup, verifyEmail , sendOtp} = require('../controllers/user')
-router.get('/test',(req,res)=>{
+router.get('/',(req,res)=>{
     console.log("fdghjhjkdfgs");
     res.status(200).json({otpsent:true,data:"ajmal"})
 })
