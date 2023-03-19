@@ -72,7 +72,7 @@ module.exports = {
             })
         } catch (error) {
             console.error(error);
-            res.status(300).json({ err: true, message: "Something went wrong", reason: error })
+            res.status(500).json({ err: true, message: "Something went wrong", reason: error })
         }
     },
     userLogin: async (req, res) => {

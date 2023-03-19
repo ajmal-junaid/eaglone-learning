@@ -6,9 +6,9 @@ const lessonSchema = ({
         type: String,
         required: true
     },
-    course:{
-        type:String,
-        required:true
+    course: {
+        type: String,
+        required: true
     },
     title: {
         type: String,
@@ -20,7 +20,7 @@ const lessonSchema = ({
     },
     video: {
         type: String,
-        required: true
+        required: false
     }
 })
 
