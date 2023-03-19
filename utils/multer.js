@@ -12,7 +12,24 @@ const storage = multerS3({
         cb(null, fileName);
     }
 });
-const upload = multer({
-    storage: storage
+
+const storageVideo = multerS3({
+    s3: s3,
+    bucket: process.env.AWS_S3_BUCKET_NAME,
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    key: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        const extension = file.mimetype.split('/')[1];
+        const fileName = file.fieldname + '-' + uniqueSuffix + '.' + extension;
+        cb(null, fileName);
+    }
 });
-module.exports = upload
+
+module.exports = {
+    upload: multer({
+        storage: storage
+    }),
+    uploadVideon:multer({
+        storage:storageVideo
+    })
+}

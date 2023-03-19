@@ -11,5 +11,6 @@ const { verifyApiKey } = require('./middlewares/verifications')
 app.use(verifyApiKey)
 app.use('/', userRoutes)
 app.use('/admin', adminRoutes)
+process.setMaxListeners(15); // (node:16026) MaxListenersExceededWarning to avoid this err
 //app.listen(3000, '192.168.64.140'); //space ip
 app.listen(3000); 

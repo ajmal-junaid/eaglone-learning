@@ -15,7 +15,7 @@ module.exports = {
             if (category) return res.status(208).json({ err: true, message: "Category Already Exists" })
             const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${req.file.key}` : null;
             req.body.image = imageUrl;
-            req.body.coursecount = 0;
+            req.body.coursecount = 0;   
             const success = await Category.create(req.body)
             if (success) return res.status(201).json({ message: "Category Added Succesfully" })
             return res.status(201).json({ err: true, message: "Category Creation Failed" })
