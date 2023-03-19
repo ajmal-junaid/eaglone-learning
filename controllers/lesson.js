@@ -25,7 +25,7 @@ module.exports = {
     },
     getAllLessons: async (req, res) => {
         try {
-            const lessons = Lesson.find()
+            const lessons = await Lesson.find()
             if (!lessons) return res.status(404).json({ err: true, message: 'lessons not found under this category' })
             return res.status(200).json({ message: "lessons fetched succesfully", data: lessons })
         } catch (error) {
