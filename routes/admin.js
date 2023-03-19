@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const multer = require("multer");
 const { adminLogin, getAllUsers } = require('../controllers/admin');
 const { addCategory, getCategory, getCategoryById, updateCategoryById, deleteCategoryById } = require('../controllers/category')
 const { addCourse, getAllCourses, getCourseById, updateCourseById } = require('../controllers/course');
+const { addLesson } = require('../controllers/lesson')
 const { verifyUser } = require('../middlewares/verifications');
-const {upload} = require('../utils/multer')
+const {upload, uploadVideo} = require('../utils/multer')
  
 router.post('/login', adminLogin);
 
@@ -28,6 +28,8 @@ router.get('/category/:id',getCategoryById)
 router.put("/update-category/:id", upload.single('image'), updateCategoryById);
 
 router.delete('/delete-category/:id',deleteCategoryById)
+
+router.post('/add-lesson',uploadVideo.single('video'),addLesson);
 
 
 

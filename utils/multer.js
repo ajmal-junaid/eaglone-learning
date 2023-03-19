@@ -29,7 +29,7 @@ module.exports = {
     upload: multer({
         storage: storage
     }),
-    uploadVideon:multer({
+    uploadVideo:multer({
         storage:storageVideo
     })
 }
