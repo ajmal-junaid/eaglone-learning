@@ -2,7 +2,7 @@ const Course = require('../models/course');
 let objectId = require('mongodb').ObjectId;
 
 module.exports = {
-    isAnyCourse:async (name) => {
+    isAnyCourse: async (name) => {
         return await Course.find({ category: name }).count() > 0;
     },
     addCourse: async (req, res) => {
@@ -12,7 +12,7 @@ module.exports = {
             req.body.courseId = courseId.toLowerCase()
             const course = await Course.findOne({ courseId: req.body.courseId })
             if (course) return res.status(208).json({ err: true, message: "Course with this Id is Already Exists" })
-            const imageUrl = req.file ? `/images/${req.file.filename}` : null;
+            const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${req.file.key}` : category.image;
             req.body.image = imageUrl;
             req.body.rating = 0;
             req.body.classes = 0;
@@ -43,13 +43,13 @@ module.exports = {
             return res.status(212).json({ err: true, message: "something Wrong", reason: error })
         }
     },
-    updateCourseById: async (req, res) => {
+    updateCourse: async (req, res) => {
         try {
             const course = await Course.findOne({ _id: req.params.id })
             if (!course) return res.status(204).json({ err: true, message: "No course found" })
 
             if (req.file != undefined) {
-                const imageUrl = req.file ? `/images/${req.file.filename}` : null;
+                const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${req.file.key}` : category.image;
                 req.body.image = imageUrl;
             } else {
                 req.body.image = course.image;
@@ -58,7 +58,7 @@ module.exports = {
                 { _id: req.params.id },
                 { $set: req.body }
             )
-            return res.status(202).json({ message: "Course fetched Successfully", data: result })
+            return res.status(202).json({ message: "Course Updated Successfully", data: result })
         } catch (error) {
             return res.status(212).json({ err: true, message: "something Wrong", reason: error })
         }

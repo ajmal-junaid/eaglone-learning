@@ -15,7 +15,7 @@ module.exports = {
             if (category) return res.status(208).json({ err: true, message: "Category Already Exists" })
             const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${req.file.key}` : null;
             req.body.image = imageUrl;
-            req.body.coursecount = 0;   
+            req.body.coursecount = 0;
             const success = await Category.create(req.body)
             if (success) return res.status(201).json({ message: "Category Added Succesfully" })
             return res.status(201).json({ err: true, message: "Category Creation Failed" })
@@ -43,22 +43,18 @@ module.exports = {
             return res.status(212).json({ err: true, message: "something Wrong", reason: error })
         }
     },
-    updateCategoryById: async (req, res) => {
+    updateCategory: async (req, res) => {
         try {
             const category = await Category.findOne({ _id: req.params.id })
             if (!category) return res.status(204).json({ err: true, message: "No category found" })
+            const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${req.file.key}` : category.image;
+            req.body.image = imageUrl;
 
-            if (req.file != undefined) {
-                const imageUrl = req.file ? `/images/${req.file.filename}` : null;
-                req.body.image = imageUrl;
-            } else {
-                req.body.image = category.image;
-            }
             const result = await Category.updateOne(
                 { _id: req.params.id },
                 { $set: req.body }
             )
-            return res.status(202).json({ message: "Category fetched Successfully", data: result })
+            return res.status(202).json({ message: "Category updated Successfully", data: result })
         } catch (error) {
             return res.status(212).json({ err: true, message: "something Wrong", reason: error })
         }

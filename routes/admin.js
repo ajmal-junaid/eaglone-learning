@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { adminLogin, getAllUsers } = require('../controllers/admin');
-const { addCategory, getCategory, getCategoryById, updateCategoryById, deleteCategoryById } = require('../controllers/category')
-const { addCourse, getAllCourses, getCourseById, updateCourseById } = require('../controllers/course');
-const { addLesson, getAllLessons } = require('../controllers/lesson')
+const { addCategory, getCategory, getCategoryById, updateCategory, deleteCategoryById } = require('../controllers/category')
+const { addCourse, getAllCourses, getCourseById, updateCourse } = require('../controllers/course');
+const { addLesson, getAllLessons, getALesson, updateLesson } = require('../controllers/lesson')
 const { verifyUser } = require('../middlewares/verifications');
 const {upload, uploadVideo} = require('../utils/multer')
  
@@ -21,17 +21,21 @@ router.get('/courses',verifyUser, getAllCourses)
 
 router.get('/course/:id',getCourseById)
 
-router.put("/update-course/:id", upload.single('image'), updateCourseById);
+router.put("/update-course/:id", upload.single('image'), updateCourse);
 
 router.get('/category/:id',getCategoryById)
 
-router.put("/update-category/:id", upload.single('image'), updateCategoryById);
+router.put("/update-category/:id", upload.single('image'), updateCategory);
 
 router.delete('/delete-category/:id',deleteCategoryById)
 
 router.post('/add-lesson',uploadVideo.single('video'),addLesson);
 
 router.get('/lessons',getAllLessons)
+
+router.get('/lesson/:id',getALesson)
+
+router.put('/update-lesson/:id',uploadVideo.single('video'),updateLesson);
 
 
 

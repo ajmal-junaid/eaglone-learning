@@ -14,6 +14,10 @@ const courseSchema=({
         type:String,
         required:false
     },
+    description:{
+        type:String,
+        required:false 
+    },
     classes:{
         type:Number,
         required:false

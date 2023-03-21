@@ -45,7 +45,6 @@ module.exports = {
                         }
                     } else {
                         next()
-                        console.log(decoded);
                     }
                 })
             } else {
