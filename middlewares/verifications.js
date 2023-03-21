@@ -15,17 +15,17 @@ module.exports = {
                 bcrypt.compare(process.env.VERIFY_KEY, apikey, (error, result) => {
                     if (error) {
                         console.log(process.env.JWT_TOKEN, error);
-                        res.status(203).json({ err: true, message: "Wrong Api Key", error })
+                        res.status(403).json({ err: true, message: "Wrong API-KEY", error })
                     }
                     if (result) {
                         next()
                     }
                 })
             } else {
-                res.status(204).json({ err: true, message: "API-KEY not found" })
+                res.status(500).json({ err: true, message: "API-KEY not found" })
             }
         } catch (errorr) {
-            res.status(203).json({ err: true, message: "unexpected API-KEY", reason: errorr })
+            res.status(203).json({ err: true, message: "unexpected API-KEY error", reason: errorr })
         }
     },
 
@@ -48,11 +48,11 @@ module.exports = {
                     }
                 })
             } else {
-                res.status(200).json({ err: true, message: "Token not exists" })
+                res.status(401).json({ err: true, message: "Token not exists" })
             }
         } catch (error) {
             console.log(error);
-            res.status(200).json({ err: true, message: "Unexpected errot", err: error })
+            res.status(500).json({ err: true, message: "Unexpected errot", err: error })
         }
     }
 

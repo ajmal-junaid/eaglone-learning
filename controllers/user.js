@@ -65,10 +65,10 @@ module.exports = {
             user.active = true;
             user.otp = undefined;
             await user.save();
-            Jwt.sign({ user }, jwtKey, { expiresIn: 86400 }, (err, token) => {
+            Jwt.sign({ name:user.name,email:user.email,mobile:user.mobile }, jwtKey, { expiresIn: 86400 }, (err, token) => {
                 if (err) return res.status(212).json({ err: true, message: "error in token generation" })
                 console.log(token, err);
-                if (token) return res.status(200).json({ auth: true, token, success: true, message: "Email verified successfully" })
+                if (token) return res.status(200).json({ token, success: true, message: "Email verified successfully" })
             })
         } catch (error) {
             console.error(error);
@@ -83,7 +83,7 @@ module.exports = {
                 const result = await bcrypt.compare(req.body.password, user.password);
                 if (result) {
                     if (!user.active) return res.status(200).json({ err: true, message: "User is Deactivated,Contact Admin" })
-                    Jwt.sign({ user }, jwtKey, { expiresIn: 86400 }, (err, token) => {
+                    Jwt.sign({ name:user.name,email:user.email,mobile:user.mobile }, jwtKey, { expiresIn: 86400 }, (err, token) => {
                         if (err) return res.status(200).json({ err: true, message: "error in token generation" })
                         if (token) return res.status(200).json({ auth: true, token: token, message: "Logged In Succesfully" })
                     })

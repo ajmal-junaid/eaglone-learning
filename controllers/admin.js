@@ -14,7 +14,7 @@ module.exports = {
                 if (isPassword) {
                     Jwt.sign({ admin }, jwtKey, { expiresIn: 86400 }, (err, token) => {
                         if (err) return res.status(212).json({ err: true, message: "error in token generation" })
-                        if (token) return res.status(200).json({ auth: true, token: token, message: "Logged In Succesfully",adminMail:admin.email })
+                        if (token) return res.status(200).json({ token: token, message: "Logged In Succesfully",adminMail:admin.email })
                     })
                      } else {
                     return res.status(200).json({ err: true, message: "wrong password" })
