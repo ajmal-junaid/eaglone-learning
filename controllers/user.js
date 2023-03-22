@@ -12,8 +12,8 @@ module.exports = {
             const { email, mobile, name } = req.body;
             const userEmail = await User.findOne({ email: email });
             const userPhone = await User.findOne({ mobile: mobile });
-            if (userEmail) return res.status(212).json({ err: true, message: "This Email Is Already Registered" });
-            if (userPhone) return res.status(212).json({ err: true, message: "This Phone Is Already Registered" });
+            if (userEmail) return res.status(212).json({success:false, err: true, message: "This Email Is Already Registered" });
+            if (userPhone) return res.status(212).json({success:false, err: true, message: "This Phone Is Already Registered" });
             req.body.password = await bcrypt.hash(req.body.password, 10);
             req.body.active = false;
             const otp = Math.floor(100000 + Math.random() * 900000);
@@ -39,16 +39,16 @@ module.exports = {
             transporter.sendMail(mailOptions, async (error, info) => {
                 if (error) {
                     console.log(error);
-                    res.json({ err: true, success: false, message: "Failed to send OTP." });
+                    res.json({ err: true, success: false, message: "Failed to send OTP.", });
                 } else {
                     const newUser = await User.create(req.body);
                     console.log("Email sent: " + info.response);
-                    res.json({ success: true, message: "OTP sent successfully.", newUser });
+                    res.json({ success: true, message: "OTP sent successfully.", data:newUser });
                 }
             });
         } catch (error) {
             console.log(error.message, "catch");
-            return res.status(300).json({ err: true, message: "something went wrong" });
+            return res.status(300).json({ success: false,err: true, message: "something went wrong" });
         }
     },
     verifyEmail: async (req, res) => {
