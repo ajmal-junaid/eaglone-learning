@@ -82,19 +82,19 @@ module.exports = {
             if (user) {
                 const result = await bcrypt.compare(req.body.password, user.password);
                 if (result) {
-                    if (!user.active) return res.status(200).json({ err: true, message: "User is Deactivated,Contact Admin" })
+                    if (!user.active) return res.status(400).json({ err: true, message: "User is Deactivated,Contact Admin" })
                     Jwt.sign({ name:user.name,email:user.email,mobile:user.mobile }, jwtKey, { expiresIn: 86400 }, (err, token) => {
-                        if (err) return res.status(200).json({ err: true, message: "error in token generation" })
-                        if (token) return res.status(200).json({ auth: true, token: token, message: "Logged In Succesfully" })
+                        if (err) return res.status(500).json({ err: true, message: "error in token generation" })
+                        if (token) return res.status(200).json({ err:false, token: token, message: "Logged In Succesfully" })
                     })
                 } else {
-                    return res.status(205).json({ err: true, message: "wrong password" })
+                    return res.status(401).json({ err: true, message: "wrong password" })
                 }
             } else {
-                return res.status(204).json({ err: true, message: "user not found" })
+                return res.status(404).json({ err: true, message: "user not found" })
             }
         } catch (error) {
-            return res.status(300).json({ err: true, message: "Something went wrong", reason: error })
+            return res.status(500).json({ err: true, message: "Something went wrong", error: error })
         }
     }
 

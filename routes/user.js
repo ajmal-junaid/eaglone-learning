@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { userLogin, userSignup, verifyEmail, sendOtp } = require('../controllers/user');
-const { getAllCourses } = require('../controllers/course');
+const { getAllCourses, getFreeCourses } = require('../controllers/course');
 const { getCategory } = require('../controllers/category');
 const { addToCart } = require('../controllers/cart');
 
@@ -20,5 +20,7 @@ router.get('/courses', getAllCourses)
 router.get('/categories', getCategory)
 
 router.post('/add-to-cart',addToCart)
+
+router.get('/free-courses',getFreeCourses)
 
 module.exports = router

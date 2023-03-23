@@ -20,7 +20,7 @@ module.exports = {
             const success = await Course.create(req.body)
             if (success) return res.status(200).json({ message: "Course Added Succesfully" })
             return res.status(500).json({ err: true, message: "Course Creation Failed" })
-        } catch (error) { 
+        } catch (error) {
             return res.status(500).json({ err: true, message: "something Wrong", reason: error })
         }
     },
@@ -29,6 +29,15 @@ module.exports = {
             const course = await Course.find();
             if (!course) return res.status(204).json({ err: true, message: "No courses found" })
             return res.status(200).json({ message: "Course fetched Successfully", data: course })
+        } catch (error) {
+            return res.status(212).json({ err: true, message: "something Wrong", reason: error })
+        }
+    },
+    getFreeCourses: async (req, res) => {
+        try {
+            const course = await Course.find({ premium: false })
+            if (course.length < 1) return res.status(404).json({ err: true, message: "No courses found" })
+            return res.status(200).json({ err: false, message: "Free Courses fetched Successfully", data: course })
         } catch (error) {
             return res.status(212).json({ err: true, message: "something Wrong", reason: error })
         }
