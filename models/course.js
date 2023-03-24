@@ -1,48 +1,56 @@
 const mongoose = require('mongoose');
 const connection = require('../utils/database');
 
-const courseSchema=({
-    title:{
-        type:String,
-        required:true
+const courseSchema = ({
+    title: {
+        type: String,
+        required: true
     },
-    courseId:{
-        type:String,
-        required:true
+    courseId: {
+        type: String,
+        required: true
     },
-    image:{
-        type:String,
-        required:false
+    image: {
+        type: String,
+        required: false
     },
-    description:{
-        type:String,
-        required:false 
+    description: {
+        type: String,
+        required: false
     },
-    classes:{
-        type:Number,
-        required:false
+    classes: {
+        type: Number,
+        required: false
     },
-    views:{
-        type:Number,
-        required:false
+    views: {
+        type: Number,
+        required: false
     },
-    price:{
-        type:Number,
-        required:false
+    price: {
+        type: Number,
+        required: false
     },
-    category:{
-        type:String,
-        required:false
+    percentage: {
+        type: Number,
+        required: false
     },
-    premium:{
-        type:Boolean,
-        required:true
+    ourPrice: {
+        type: Number,
+        required: false
     },
-    rating:{
-        type:Number,
-        required:false
+    category: {
+        type: String,
+        required: false
+    },
+    premium: {
+        type: Boolean,
+        required: true
+    },
+    rating: {
+        type: Number,
+        required: false
     }
 })
 
-const Course = connection.model('Course',courseSchema);
+const Course = connection.model('Course', courseSchema);
 module.exports = Course

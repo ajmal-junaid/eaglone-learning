@@ -18,6 +18,8 @@ module.exports = {
             req.body.classes = 0;
             req.body.views = 0
             req.body.price = req.body.price ? req.body.price : 0;
+            req.body.percentage = req.body.percentage ? req.body.percentage : 0;
+            req.body.ourPrice = Math.round(req.body.price - (req.body.price * (req.body.percentage / 100)));
             const success = await Course.create(req.body)
             if (success) return res.status(200).json({ message: "Course Added Succesfully" })
             return res.status(500).json({ err: true, message: "Course Creation Failed" })

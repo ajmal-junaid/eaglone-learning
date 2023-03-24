@@ -7,23 +7,23 @@ const s3 = require('../utils/awsbucket')
 module.exports = {
     adminLogin: async (req, res) => {
         try {
-            if(!req.body.email || !req.body.password) return res.status(400).json({err:true,message:"Invalid data"})
+            if (!req.body.email || !req.body.password) return res.status(400).json({ err: true, message: "Invalid data" })
             const admin = await Admin.findOne({ email: req.body.email });
             if (admin) {
                 const isPassword = await bcrypt.compare(req.body.password, admin.password);
                 if (isPassword) {
                     Jwt.sign({ admin }, jwtKey, { expiresIn: 86400 }, (err, token) => {
-                        if (err) return res.status(212).json({ err: true, message: "error in token generation" })
-                        if (token) return res.status(200).json({ token: token, message: "Logged In Succesfully",adminMail:admin.email })
+                        if (err) return res.status(500).json({ err: true, message: "error in token generation" })
+                        if (token) return res.status(200).json({ token: token, message: "Logged In Succesfully", adminMail: admin.email })
                     })
-                     } else {
-                    return res.status(200).json({ err: true, message: "wrong password" })
+                } else {
+                    return res.status(401).json({ err: true, message: "wrong password" })
                 }
             } else {
-                return res.status(200).json({ err: true, message: "admin not found" })
+                return res.status(404).json({ err: true, message: "admin not found" })
             }
         } catch (error) {
-            return res.status(300).json({ err: true, message: "Something went wrong", reason: error })
+            return res.status(500).json({ err: true, message: "Something went wrong", reason: error })
         }
     },
     getAllUsers: async (req, res) => {

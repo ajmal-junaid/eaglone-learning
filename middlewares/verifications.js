@@ -37,9 +37,9 @@ module.exports = {
                 Jwt.verify(token, jwtKey, (err, decoded) => {
                     if (err) {
                         if (err.name === 'JsonWebTokenError') {
-                            return res.status(401).json({ err: true, message: "Invalid Token", reason: err.name })
+                            return res.status(401).json({ err: true, message: "User Authentication Failed, Login again", reason: err.name })
                         } else if (err.name === 'TokenExpiredError') {
-                            return res.status(401).json({ err: true, message: "token has expired", reason: err.name })
+                            return res.status(401).json({ err: true, message: "Timeout, Login again", reason: err.name })
                         } else {
                             return res.status(401).json({ err: true, message: "some other error occurred", reason: err })
                         }
