@@ -17,6 +17,7 @@ module.exports = {
             req.body.rating = 0;
             req.body.classes = 0;
             req.body.views = 0
+            req.body.price = req.body.price ? req.body.price : 0;
             const success = await Course.create(req.body)
             if (success) return res.status(200).json({ message: "Course Added Succesfully" })
             return res.status(500).json({ err: true, message: "Course Creation Failed" })

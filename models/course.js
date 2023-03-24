@@ -26,6 +26,10 @@ const courseSchema=({
         type:Number,
         required:false
     },
+    price:{
+        type:Number,
+        required:false
+    },
     category:{
         type:String,
         required:false
