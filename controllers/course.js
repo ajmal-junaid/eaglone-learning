@@ -45,6 +45,15 @@ module.exports = {
             return res.status(212).json({ err: true, message: "something Wrong", reason: error })
         }
     },
+    getPaidCourses: async (req, res) => {
+        try {
+            const course = await Course.find({ premium: true })
+            if (course.length < 1) return res.status(404).json({ err: true, message: "No courses found" })
+            return res.status(200).json({ err: false, message: "Premium Courses fetched Successfully", data: course })
+        } catch (error) {
+            return res.status(212).json({ err: true, message: "something Wrong", reason: error })
+        }
+    },
     getCourseById: async (req, res) => {
         try {
             const course = await Course.findOne({ _id: req.params.id })
@@ -72,6 +81,15 @@ module.exports = {
             return res.status(202).json({ message: "Course Updated Successfully", data: result })
         } catch (error) {
             return res.status(212).json({ err: true, message: "something Wrong", reason: error })
+        }
+    },
+    getCourseByCategoryName: async (req, res) => {
+        try {
+            const course = await Course.find({ category: req.params.id })
+            if (course.length < 1) return res.status(404).json({ err: true, message: "No courses found under this category" })
+            return res.status(200).json({ message: "Courses fetched Successfully", data: course })
+        } catch (error) {
+            return res.status(500).json({ err: true, message: "something Wrong", reason: error })
         }
     }
 }
