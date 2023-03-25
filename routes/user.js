@@ -20,8 +20,6 @@ router.get('/courses', getAllCourses)
 
 router.get('/categories', getCategory)
 
-router.post('/add-to-cart',addToCart)
-
 router.get('/free-courses',getFreeCourses)
 
 router.get('/paid-courses',getPaidCourses)
@@ -33,5 +31,7 @@ router.get('/course/:id',getCourseByCourseId);
 router.get('/get-lessons-course/:id',getAllLessonsByCourse)
 
 router.get('/category-details/:id',getCategoryByName);
+
+router.post('/add-to-cart',addToCart)
 
 module.exports = router
