@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { userLogin, userSignup, verifyEmail, sendOtp } = require('../controllers/user');
-const { getAllCourses, getFreeCourses, getCourseByCategoryName, getPaidCourses, getCourseById } = require('../controllers/course');
-const { getCategory } = require('../controllers/category');
+const { getAllCourses, getFreeCourses, getCourseByCategoryName, getPaidCourses, getCourseById, getCourseByCourseId } = require('../controllers/course');
+const { getCategory, getCategoryByName } = require('../controllers/category');
 const { addToCart } = require('../controllers/cart');
+const { getAllLessonsByCourse } = require('../controllers/lesson');
 
 router.get('/test', (req, res) => {
     console.log("api is working");
@@ -27,6 +28,10 @@ router.get('/paid-courses',getPaidCourses)
 
 router.get('/get-course-category/:id',getCourseByCategoryName)
 
-router.get('/course/:id',getCourseById);
+router.get('/course/:id',getCourseByCourseId);
+
+router.get('/get-lessons-course/:id',getAllLessonsByCourse)
+
+router.get('/category-details/:id',getCategoryByName);
 
 module.exports = router

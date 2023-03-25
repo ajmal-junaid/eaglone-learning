@@ -71,5 +71,14 @@ module.exports = {
         } catch (error) {
             return res.status(500).json({ err: true, message: "something Wrong", reason: error })
         }
+    },
+    getAllLessonsByCourse: async (req, res) => {
+        try {
+            const lessons = await Lesson.find({ course: req.params.id }).select("-video")
+            if (!lessons) return res.status(404).json({ err: true, message: 'lessons not found under this course' })
+            return res.status(200).json({ message: "lessons fetched succesfully", data: lessons })
+        } catch (error) {
+            return res.status(500).json({ err: true, message: "operation failed ", reason: error })
+        }
     }
 }

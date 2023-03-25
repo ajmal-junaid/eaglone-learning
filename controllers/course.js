@@ -85,11 +85,20 @@ module.exports = {
     },
     getCourseByCategoryName: async (req, res) => {
         try {
-            const course = await Course.find({ category: req.params.id })
-            if (course.length < 1) return res.status(404).json({ err: true, message: "No courses found under this category" })
-            return res.status(200).json({ message: "Courses fetched Successfully", data: course })
+            const courses = await Course.find({ category: req.params.id })
+            if (courses.length < 1) return res.status(404).json({ err: true, message: "No courses found under this category" })
+            return res.status(200).json({ message: "Courses fetched Successfully", data: courses })
         } catch (error) {
             return res.status(500).json({ err: true, message: "something Wrong", reason: error })
+        }
+    },
+    getCourseByCourseId: async (req, res) => {
+        try {
+            const course = await Course.findOne({ courseId: req.params.id })
+            if (!course) return res.status(204).json({ err: true, message: "No course found" })
+            return res.status(200).json({ message: "Course fetched Successfully", data: course })
+        } catch (error) {
+            return res.status(212).json({ err: true, message: "something Wrong", reason: error })
         }
     }
 }

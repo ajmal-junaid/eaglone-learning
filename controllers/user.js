@@ -6,9 +6,7 @@ const nodemailer = require('nodemailer');
 
 module.exports = {
     userSignup: async (req, res) => {
-        console.log(req.body);
         try {
-            console.log(req.body, "try");
             const { email, mobile, name } = req.body;
             const userEmail = await User.findOne({ email: email });
             const userPhone = await User.findOne({ mobile: mobile });
@@ -43,7 +41,7 @@ module.exports = {
                 } else {
                     const newUser = await User.create(req.body);
                     console.log("Email sent: " + info.response);
-                    res.json({ success: true, message: "OTP sent successfully.", data:newUser });
+                    res.json({ success: true, message: "OTP sent successfully.", data:{key:"not displayable"} });
                 }
             });
         } catch (error) {
@@ -78,7 +76,6 @@ module.exports = {
     userLogin: async (req, res) => {
         try {
             const user = await User.findOne({ email: req.body.email });
-            console.log(user);
             if (user) {
                 const result = await bcrypt.compare(req.body.password, user.password);
                 if (result) {

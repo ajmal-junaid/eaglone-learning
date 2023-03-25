@@ -70,5 +70,14 @@ module.exports = {
         } catch (error) {
             return res.status(212).json({ err: true, message: "something Wrong", reason: error })
         }
+    },
+    getCategoryByName: async (req, res) => {
+        try {
+            const category = await Category.findOne({ name: req.params.id })
+            if (!category) return res.status(404).json({ err: true, message: "No category found" })
+            return res.status(200).json({ message: "Category fetched Successfully", data: category })
+        } catch (error) {
+            return res.status(500).json({ err: true, message: "something Wrong", reason: error })
+        }
     }
 }

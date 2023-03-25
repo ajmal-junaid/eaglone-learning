@@ -32,7 +32,7 @@ module.exports = {
             if (userData) {
                 return res.status(200).json({ message: "success", userData })
             } else {
-                return res.status(500).json({ err: true, message: "Users not found on DB" })
+                return res.status(404).json({ err: true, message: "Users not found on DB" })
             }
         } catch (error) {
             console.log(error);
