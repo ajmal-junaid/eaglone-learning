@@ -3,7 +3,7 @@ const router = express.Router();
 const { userLogin, userSignup, verifyEmail, sendOtp } = require('../controllers/user');
 const { getAllCourses, getFreeCourses, getCourseByCategoryName, getPaidCourses, getCourseById, getCourseByCourseId } = require('../controllers/course');
 const { getCategory, getCategoryByName } = require('../controllers/category');
-const { addToCart } = require('../controllers/cart');
+const { addToCart, removeCourse } = require('../controllers/cart');
 const { getAllLessonsByCourse } = require('../controllers/lesson');
 
 router.get('/test', (req, res) => {
@@ -33,5 +33,7 @@ router.get('/get-lessons-course/:id',getAllLessonsByCourse)
 router.get('/category-details/:id',getCategoryByName);
 
 router.post('/add-to-cart',addToCart)
+
+router.post('/remove-from-cart',removeCourse)
 
 module.exports = router

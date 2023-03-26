@@ -24,16 +24,29 @@ module.exports = {
             if (success) return res.status(200).json({ message: "Course Added Succesfully" })
             return res.status(500).json({ err: true, message: "Course Creation Failed" })
         } catch (error) {
-            return res.status(500).json({ err: true, message: "something Wrong", reason: error })
+            return res.status(500).json({ err: true, message: "Something Went Wrong", reason: error })
         }
     },
     getAllCourses: async (req, res) => {
         try {
-            const course = await Course.find();
-            if (!course) return res.status(204).json({ err: true, message: "No courses found" })
-            return res.status(200).json({ message: "Course fetched Successfully", data: course })
+            const { page = 1, limit = 10 } = req.query;
+            const skipIndex = (page - 1) * limit;
+            const [courses, count] = await Promise.all([
+                Course.find()
+                    .sort({ createdAt: -1 })
+                    .limit(limit)
+                    .skip(skipIndex)
+                    .exec(),
+                Course.countDocuments()
+            ]);
+            if (!courses || courses.length === 0) {
+                return res.status(404).json({ err: true, message: "No courses found" })
+            }
+            const totalPages = Math.ceil(count / limit);
+            const currentPage = page > totalPages ? totalPages : page;
+            return res.status(200).json({ message: "Courses fetched successfully", data: courses, totalPages, currentPage });
         } catch (error) {
-            return res.status(212).json({ err: true, message: "something Wrong", reason: error })
+            return res.status(500).json({ err: true, message: "Something Went Wrong", reason: error });
         }
     },
     getFreeCourses: async (req, res) => {
@@ -42,7 +55,7 @@ module.exports = {
             if (course.length < 1) return res.status(404).json({ err: true, message: "No courses found" })
             return res.status(200).json({ err: false, message: "Free Courses fetched Successfully", data: course })
         } catch (error) {
-            return res.status(212).json({ err: true, message: "something Wrong", reason: error })
+            return res.status(212).json({ err: true, message: "Something Went Wrong", reason: error })
         }
     },
     getPaidCourses: async (req, res) => {
@@ -80,7 +93,7 @@ module.exports = {
             )
             return res.status(202).json({ message: "Course Updated Successfully", data: result })
         } catch (error) {
-            return res.status(212).json({ err: true, message: "something Wrong", reason: error })
+            return res.status(212).json({ err: true, message: "Something Went Wrong", reason: error })
         }
     },
     getCourseByCategoryName: async (req, res) => {
@@ -89,7 +102,7 @@ module.exports = {
             if (courses.length < 1) return res.status(404).json({ err: true, message: "No courses found under this category" })
             return res.status(200).json({ message: "Courses fetched Successfully", data: courses })
         } catch (error) {
-            return res.status(500).json({ err: true, message: "something Wrong", reason: error })
+            return res.status(500).json({ err: true, message: "Something Went Wrong", reason: error })
         }
     },
     getCourseByCourseId: async (req, res) => {
@@ -98,7 +111,7 @@ module.exports = {
             if (!course) return res.status(204).json({ err: true, message: "No course found" })
             return res.status(200).json({ message: "Course fetched Successfully", data: course })
         } catch (error) {
-            return res.status(212).json({ err: true, message: "something Wrong", reason: error })
+            return res.status(212).json({ err: true, message: "Something Went Wrong", reason: error })
         }
     }
 }

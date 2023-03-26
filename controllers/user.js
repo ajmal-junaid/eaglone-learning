@@ -10,8 +10,8 @@ module.exports = {
             const { email, mobile, name } = req.body;
             const userEmail = await User.findOne({ email: email });
             const userPhone = await User.findOne({ mobile: mobile });
-            if (userEmail) return res.status(212).json({success:false, err: true, message: "This Email Is Already Registered" });
-            if (userPhone) return res.status(212).json({success:false, err: true, message: "This Phone Is Already Registered" });
+            if (userEmail) return res.status(212).json({ success: false, err: true, message: "This Email Is Already Registered" });
+            if (userPhone) return res.status(212).json({ success: false, err: true, message: "This Phone Is Already Registered" });
             req.body.password = await bcrypt.hash(req.body.password, 10);
             req.body.active = false;
             const otp = Math.floor(100000 + Math.random() * 900000);
@@ -41,12 +41,12 @@ module.exports = {
                 } else {
                     const newUser = await User.create(req.body);
                     console.log("Email sent: " + info.response);
-                    res.json({ success: true, message: "OTP sent successfully.", data:{key:"not displayable"} });
+                    res.json({ success: true, message: "OTP sent successfully.", data: { key: "not displayable" } });
                 }
             });
         } catch (error) {
             console.log(error.message, "catch");
-            return res.status(300).json({ success: false,err: true, message: "something went wrong" });
+            return res.status(300).json({ success: false, err: true, message: "something went wrong" });
         }
     },
     verifyEmail: async (req, res) => {
@@ -63,7 +63,7 @@ module.exports = {
             user.active = true;
             user.otp = undefined;
             await user.save();
-            Jwt.sign({ name:user.name,email:user.email,mobile:user.mobile }, jwtKey, { expiresIn: 86400 }, (err, token) => {
+            Jwt.sign({ name: user.name, email: user.email, mobile: user.mobile, _id: user._id }, jwtKey, { expiresIn: 86400 }, (err, token) => {
                 if (err) return res.status(212).json({ err: true, message: "error in token generation" })
                 console.log(token, err);
                 if (token) return res.status(200).json({ token, success: true, message: "Email verified successfully" })
@@ -80,9 +80,9 @@ module.exports = {
                 const result = await bcrypt.compare(req.body.password, user.password);
                 if (result) {
                     if (!user.active) return res.status(400).json({ err: true, message: "User is Deactivated,Contact Admin" })
-                    Jwt.sign({ name:user.name,email:user.email,mobile:user.mobile }, jwtKey, { expiresIn: 86400 }, (err, token) => {
+                    Jwt.sign({ name: user.name, email: user.email, mobile: user.mobile, _id: user._id }, jwtKey, { expiresIn: 86400 }, (err, token) => {
                         if (err) return res.status(500).json({ err: true, message: "error in token generation" })
-                        if (token) return res.status(200).json({ err:false, token: token, message: "Logged In Succesfully" })
+                        if (token) return res.status(200).json({ err: false, token: token, message: "Logged In Succesfully" })
                     })
                 } else {
                     return res.status(401).json({ err: true, message: "wrong password" })
