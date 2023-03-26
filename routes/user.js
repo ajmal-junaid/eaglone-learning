@@ -3,8 +3,9 @@ const router = express.Router();
 const { userLogin, userSignup, verifyEmail, sendOtp } = require('../controllers/user');
 const { getAllCourses, getFreeCourses, getCourseByCategoryName, getPaidCourses, getCourseById, getCourseByCourseId } = require('../controllers/course');
 const { getCategory, getCategoryByName } = require('../controllers/category');
-const { addToCart, removeCourse } = require('../controllers/cart');
+const { addToCart, removeCourse, getCartCourses } = require('../controllers/cart');
 const { getAllLessonsByCourse } = require('../controllers/lesson');
+const { verifyUser } = require('../middlewares/verifications');
 
 router.get('/test', (req, res) => {
     console.log("api is working");
@@ -32,8 +33,10 @@ router.get('/get-lessons-course/:id',getAllLessonsByCourse)
 
 router.get('/category-details/:id',getCategoryByName);
 
-router.post('/add-to-cart',addToCart)
+router.post('/add-to-cart',verifyUser,addToCart)
 
 router.post('/remove-from-cart',removeCourse)
+
+router.get('/get-cart',getCartCourses);
 
 module.exports = router

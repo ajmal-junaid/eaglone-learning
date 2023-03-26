@@ -1,6 +1,7 @@
 const User = require('../models/user')
 const ObjectId = require("mongodb").ObjectId;
 const mongoose = require('mongoose');
+const Course = require('../models/course');
 
 module.exports = {
     addToCart: async (req, res) => {
@@ -20,7 +21,7 @@ module.exports = {
             }
         } catch (error) {
             console.log(error);
-            res.status(500).json({ err: true, message: 'Internal Server Error' });
+            res.status(500).json({ err: true, message: 'Something Went Wrong' });
         }
     },
     removeCourse: async (req, res) => {
@@ -39,10 +40,40 @@ module.exports = {
             res.status(200).json({ err: false, message: 'Product Removed from Cart' });
         } catch (error) {
             console.log(error);
-            res.status(500).json({ err: true, message: 'Internal Server Error' });
+            res.status(500).json({ err: true, message: 'Something Went Wrong' });
         }
 
+    },
+    getCartCourses: async (req, res) => {
+        try {
+            const { userId } = req.query;
+            if (!mongoose.isValidObjectId(userId)) {
+                return res.status(400).json({ err: true, message: 'Invalid user ID' });
+            }
+            const user = await User.findById(userId).populate({
+                path: 'cart',
+                model: 'Course'
+            });
+            if (!user) {
+                return res.status(404).json({ err: true, message: 'User Not Found' });
+            }
+            const cart = user.cart;
+            if (!cart.length > 0) return res.status(404).json({ err: true, message: 'Cart is empty' });
+            const cartDetails = cart.map(course => ({
+                _id: course._id,
+                title: course.title,
+                category: course.category,
+                ourPrice: course.ourPrice,
+                price: course.price,
+                premium: course.premium
+            }));
+            res.status(200).json({ err: false, data: cartDetails });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ err: true, message: 'Something Went Wrong' });
+        }
     }
+
 
 
 
