@@ -6,6 +6,7 @@ const { getCategory, getCategoryByName } = require('../controllers/category');
 const { addToCart, removeCourse, getCartCourses } = require('../controllers/cart');
 const { getAllLessonsByCourse } = require('../controllers/lesson');
 const { verifyUser } = require('../middlewares/verifications');
+const { applyCoupon } = require('../controllers/coupon');
 
 router.get('/test', (req, res) => {
     console.log("api is working");
@@ -38,5 +39,8 @@ router.post('/add-to-cart',verifyUser,addToCart)
 router.post('/remove-from-cart',removeCourse)
 
 router.get('/get-cart',getCartCourses);
+
+router.post('/apply-coupon',applyCoupon)
+
 
 module.exports = router
