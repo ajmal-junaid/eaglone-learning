@@ -63,8 +63,10 @@ module.exports = {
                 _id: course._id,
                 title: course.title,
                 category: course.category,
+                image: course.image,
                 ourPrice: course.ourPrice,
                 price: course.price,
+                percentage: course.percentage,
                 premium: course.premium
             }));
             res.status(200).json({ err: false, data: cartDetails });
