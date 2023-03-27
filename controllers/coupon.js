@@ -72,7 +72,7 @@ module.exports = {
             const discountAmount = Math.min(req.body.totalAmount * coupon.percentage / 100, coupon.maximumDiscount);
             coupon.limit--;
             await coupon.save();
-            return res.status(200).json({ err: false, message: "coupon applied successfully", data: discountAmount })
+            return res.status(200).json({ err: false, message: `${coupon.code} applied successfully (upto ${coupon.maximumDiscount} off)`, data: discountAmount })
         } catch (error) {
             res.status(500).json({ err: true, message: "Something Went Wrong" });
         }
