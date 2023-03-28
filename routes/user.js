@@ -4,7 +4,7 @@ const { userLogin, userSignup, verifyEmail, sendOtp, viewPurchasedCourses } = re
 const { getAllCourses, getFreeCourses, getCourseByCategoryName, getPaidCourses, getCourseById, getCourseByCourseId } = require('../controllers/course');
 const { getCategory, getCategoryByName } = require('../controllers/category');
 const { addToCart, removeCourse, getCartCourses } = require('../controllers/cart');
-const { getAllLessonsByCourse } = require('../controllers/lesson');
+const { getAllLessonsByCourse, getAllLessonsByCourseId } = require('../controllers/lesson');
 const { verifyUser } = require('../middlewares/verifications');
 const { applyCoupon } = require('../controllers/coupon');
 const { createOrder } = require('../controllers/order');
@@ -46,6 +46,10 @@ router.post('/apply-coupon',applyCoupon);
 router.post('/create-order',createOrder)
 
 router.get('/get-purchased-courses/:id',viewPurchasedCourses)
+
+router.get('/get-lessons-pcourse/:id',getAllLessonsByCourseId)
+
+router.get('/cours/:id',getCourseById);
 
 
 module.exports = router
