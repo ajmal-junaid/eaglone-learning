@@ -107,7 +107,7 @@ module.exports = {
     },
     getCourseByCourseId: async (req, res) => {
         try {
-            const course = await Course.findOne({ courseId: req.params.id })
+            const course = await Course.findOne({ _id: req.params.id })
             if (!course) return res.status(204).json({ err: true, message: "No course found" })
             return res.status(200).json({ message: "Course fetched Successfully", data: course })
         } catch (error) {

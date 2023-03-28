@@ -31,7 +31,13 @@ const userSchema = new mongoose.Schema({
     cart: {
         type: [mongoose.Schema.Types.ObjectId],
         default: []
-    }
+    },
+    coursesPurchased: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Course',
+        },
+    ],
 });
 
 userSchema.methods.generateAuthToken = () => {

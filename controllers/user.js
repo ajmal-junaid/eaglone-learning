@@ -93,6 +93,15 @@ module.exports = {
         } catch (error) {
             return res.status(500).json({ err: true, message: "Something went wrong", error: error })
         }
+    },
+    viewPurchasedCourses: async (req, res) => {
+        try {
+            const userId = req.params.id;
+            const user = await User.findById(userId).populate('coursesPurchased');
+            res.status(200).json({err:false,message:"course fetched successfully",data:user.coursesPurchased});
+        } catch (error) {
+            return res.status(500).json({ err: true, message: "Something went wrong", error: error })
+        }
     }
 
 }
