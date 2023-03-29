@@ -77,4 +77,5 @@ module.exports = {
             res.status(500).json({ err: true, message: "Something Went Wrong" });
         }
     }
+    
 }

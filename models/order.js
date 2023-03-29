@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const connection = require('../utils/database');
 
-const orderSchema = ({
+const orderSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -27,6 +27,13 @@ const orderSchema = ({
         required: true
     },
     createdAt: { type: Date, default: Date.now },
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+});
+
+orderSchema.virtual('totalAmount').get(function () {
+    return this.payment.amount - (this.coupon ? this.coupon.discount : 0);
 });
 
 const Order = connection.model("Order", orderSchema)

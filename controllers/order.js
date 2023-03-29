@@ -6,18 +6,22 @@ module.exports = {
     createOrder: async (req, res) => {
         try {
             const { user, courses, payment, coupon } = req.body;
-            const userCoursesPurchased = await User.findById(user).select('coursesPurchased');
-            console.log(userCoursesPurchased, "firtttt");
+            const userCoursesPurchased = await User.findById(user).select('coursesPurchased')
             const purchasedCourseIds = userCoursesPurchased.coursesPurchased.map(course => course.toString());
-            console.log(purchasedCourseIds, "purchasedCourseIds");
-
-            const coursesToPurchase = courses.filter(course => !purchasedCourseIds.includes(course.course.toString()));
-            if (coursesToPurchase.length === 0) {
-                return res.status(400).json({ error: 'User has already purchased these courses' });
+            if (purchasedCourseIds.length) {
+                const coursesToPurchase = courses.filter(course => !purchasedCourseIds.includes(course.toString()));
+                if (coursesToPurchase.length === 0) {
+                    return res.status(400).json({err:true, message: 'User has already purchased All these courses' });
+                } else {
+                    return res.status(400).json({err:true, message: 'Already purchased some of these courses' });
+                }
             }
-            const courseDocuments = await Course.find({ _id: { $in: coursesToPurchase } });
+            const courseDocuments = await Course.find({ _id: { $in: courses } });
+            if (!courseDocuments) return res.status(400).json({ err:true, message: 'Courses is removed or expired (not found)' });
+            await User.findByIdAndUpdate(user, { $addToSet: { coursesPurchased: { $each: courses } } }, { new: true })
             const order = new Order({
                 user: user,
+                coupon: coupon,
                 courses: courseDocuments.map(course => ({ course: course._id, price: course.ourPrice })),
                 payment: {
                     method: payment.method,
@@ -27,15 +31,16 @@ module.exports = {
                             return acc + curr.ourPrice;
                         }
                         return acc + curr.price;
-                    }, 0)
-                }
+                    }, 0),
+                },
+                coupon: coupon
             });
-            const newOrder = await order.save();
-            res.status(201).json(newOrder);
+            res.status(201).json({err:false,message:"order placed successfully ",data: order });
         } catch (err) {
             console.error(err);
-            res.status(500).json({ message: 'Internal server error' });
+            res.status(500).json({err:true, message: 'Internal server error' });
         }
     }
 }
+
 
