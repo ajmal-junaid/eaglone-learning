@@ -13,4 +13,7 @@ app.use('/', userRoutes)
 app.use('/admin', adminRoutes)
 process.setMaxListeners(15); // (node:16026) MaxListenersExceededWarning to avoid this err
 //app.listen(3000, '192.168.64.140'); //space ip
-app.listen(3000); 
+app.listen(3000,error=>{
+    if(error) console.log(error,"connection failed")
+    console.log("server is running on Port 3000");
+}); 

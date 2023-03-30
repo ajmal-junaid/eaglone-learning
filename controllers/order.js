@@ -2,6 +2,7 @@ const mongoose=require('mongoose');
 const Order = require('../models/order');
 const Course = require('../models/course');
 const User = require('../models/user');
+const Stripe  = require('stripe')(process.env.SECRET_KEY)
 
 module.exports = {
     createOrder: async (req, res) => {
@@ -44,6 +45,23 @@ module.exports = {
             console.error(err);
             res.status(500).json({err:true, message: 'Internal server error' });
         }
+    },
+    payment:async(req,res)=>{
+        let status,error;
+        const {token,amount}=req.body;
+        console.log(token, amount);
+        try {
+            await Stripe.charges.create({
+                source:token.id,
+                amount,
+                currency:'usd'
+            })
+            status='success'
+        } catch (error) {
+            console.log(error);
+            status="failed"
+        }
+        res.status(200).json({err:false,message:"payment successfull",status})
     }
 }
 
