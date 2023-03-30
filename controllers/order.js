@@ -1,3 +1,4 @@
+const mongoose=require('mongoose');
 const Order = require('../models/order');
 const Course = require('../models/course');
 const User = require('../models/user');
@@ -6,6 +7,9 @@ module.exports = {
     createOrder: async (req, res) => {
         try {
             const { user, courses, payment, coupon } = req.body;
+            if (!mongoose.isValidObjectId(user)) {
+                return res.status(400).json({ err: true, message: 'User ID' });
+            }
             const userCoursesPurchased = await User.findById(user).select('coursesPurchased')
             const purchasedCourseIds = userCoursesPurchased.coursesPurchased.map(course => course.toString());
             if (purchasedCourseIds.length) {

@@ -3,7 +3,7 @@ const router = express.Router();
 const { userLogin, userSignup, verifyEmail, sendOtp, viewPurchasedCourses } = require('../controllers/user');
 const { getAllCourses, getFreeCourses, getCourseByCategoryName, getPaidCourses, getCourseById, getCourseByCourseId } = require('../controllers/course');
 const { getCategory, getCategoryByName } = require('../controllers/category');
-const { addToCart, removeCourse, getCartCourses } = require('../controllers/cart');
+const { addToCart, removeCourse, getCartCourses, addFreeCourse } = require('../controllers/cart');
 const { getAllLessonsByCourse, getAllLessonsByCourseId } = require('../controllers/lesson');
 const { verifyUser } = require('../middlewares/verifications');
 const { applyCoupon } = require('../controllers/coupon');
@@ -50,6 +50,8 @@ router.get('/get-purchased-courses/:id',viewPurchasedCourses)
 router.get('/get-lessons-pcourse/:id',getAllLessonsByCourseId)
 
 router.get('/cours/:id',getCourseById);
+
+router.post('/add-free-course',addFreeCourse)
 
 
 module.exports = router

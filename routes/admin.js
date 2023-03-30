@@ -43,17 +43,11 @@ router.post('/add-coupon', addCoupon)
 
 router.delete('/delete-coupon/:id', deleteCoupon)
 
-router.get('/coupons',getAllCoupons)
+router.get('/coupons', getAllCoupons)
 
-router.post('/add-banner', upload.single("image"), addBanner);
+router.post('/add-banner',upload.single('image'), addBanner);
 
-router.get('/get-banner',getBanner)
-
-
-
-
-
-
+router.get('/get-banner', getBanner)
 
 
 module.exports = router
