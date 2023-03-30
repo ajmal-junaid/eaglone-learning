@@ -8,6 +8,7 @@ const { getAllLessonsByCourse, getAllLessonsByCourseId } = require('../controlle
 const { verifyUser } = require('../middlewares/verifications');
 const { applyCoupon } = require('../controllers/coupon');
 const { createOrder } = require('../controllers/order');
+const { getBanner } = require('../controllers/banner');
 
 router.get('/test', (req, res) => {
     console.log("api is working");
@@ -29,19 +30,19 @@ router.get('/paid-courses',getPaidCourses)
 
 router.get('/get-course-category/:id',getCourseByCategoryName)
 
-router.get('/course/:id',getCourseByCourseId);
+router.get('/course/:id',getCourseByCourseId)
 
 router.get('/get-lessons-course/:id',getAllLessonsByCourse)
 
-router.get('/category-details/:id',getCategoryByName);
+router.get('/category-details/:id',getCategoryByName)
 
 router.post('/add-to-cart',verifyUser,addToCart)
 
 router.post('/remove-from-cart',removeCourse)
 
-router.get('/get-cart',getCartCourses);
+router.get('/get-cart',getCartCourses)
 
-router.post('/apply-coupon',applyCoupon);
+router.post('/apply-coupon',applyCoupon)
 
 router.post('/create-order',createOrder)
 
@@ -49,9 +50,11 @@ router.get('/get-purchased-courses/:id',viewPurchasedCourses)
 
 router.get('/get-lessons-pcourse/:id',getAllLessonsByCourseId)
 
-router.get('/cours/:id',getCourseById);
+router.get('/cours/:id',getCourseById)
 
 router.post('/add-free-course',addFreeCourse)
+
+router.get('/banners',getBanner)
 
 
 module.exports = router

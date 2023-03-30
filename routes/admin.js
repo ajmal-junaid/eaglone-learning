@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { adminLogin, getAllUsers } = require('../controllers/admin');
-const { addBanner, getBanner } = require('../controllers/banner');
+const { addBanner, getBanner, deleteBanner } = require('../controllers/banner');
 const { addCategory, getCategory, getCategoryById, updateCategory, deleteCategoryById } = require('../controllers/category');
 const { addCoupon, deleteCoupon, getAllCoupons } = require('../controllers/coupon');
 const { addCourse, getAllCourses, getCourseById, updateCourse } = require('../controllers/course');
@@ -45,9 +45,11 @@ router.delete('/delete-coupon/:id', deleteCoupon)
 
 router.get('/coupons', getAllCoupons)
 
-router.post('/add-banner',upload.single('image'), addBanner);
+router.post('/add-banner',upload.single('image'), addBanner)
 
-router.get('/get-banner', getBanner)
+router.get('/banners', getBanner)
+
+router.delete('/delete-banner/:id',deleteBanner)
 
 
 module.exports = router
