@@ -1,13 +1,14 @@
-const mongoose=require('mongoose');
+const mongoose = require('mongoose');
 const Order = require('../models/order');
 const Course = require('../models/course');
 const User = require('../models/user');
-const Stripe  = require('stripe')(process.env.SECRET_KEY)
+const Stripe = require('stripe')(process.env.SECRET_KEY)
 
 module.exports = {
     createOrder: async (req, res) => {
+        console.log(req.body,"body daaaaaaaaaa");
         try {
-            const { user, courses, payment, coupon } = req.body;
+            const { user, courses, payment, coupon ,client} = req.body;
             if (!mongoose.isValidObjectId(user)) {
                 return res.status(400).json({ err: true, message: 'User ID' });
             }
@@ -16,52 +17,69 @@ module.exports = {
             if (purchasedCourseIds.length) {
                 const coursesToPurchase = courses.filter(course => !purchasedCourseIds.includes(course.toString()));
                 if (coursesToPurchase.length === 0) {
-                    return res.status(400).json({err:true, message: 'User has already purchased All these courses' });
+                    return res.status(400).json({ err: true, message: 'User has already purchased All these courses' });
                 } else {
-                    return res.status(400).json({err:true, message: 'Already purchased some of these courses' });
+                    return res.status(400).json({ err: true, message: 'Already purchased some of these courses' });
                 }
             }
             const courseDocuments = await Course.find({ _id: { $in: courses } });
-            if (!courseDocuments) return res.status(400).json({ err:true, message: 'Courses is removed or expired (not found)' });
-            await User.findByIdAndUpdate(user, { $addToSet: { coursesPurchased: { $each: courses } } }, { new: true })
-            const order = new Order({
+            if (!courseDocuments) return res.status(400).json({ err: true, message: 'Courses is removed or expired (not found)' });
+            // await User.findByIdAndUpdate(user, { $addToSet: { coursesPurchased: { $each: courses } } }, { new: true })
+            Order.create({
                 user: user,
                 coupon: coupon,
+                client:client,
                 courses: courseDocuments.map(course => ({ course: course._id, price: course.ourPrice })),
                 payment: {
-                    method: payment.method,
-                    transactionId: payment.transactionId,
+                    method: payment?.method,
+                    transactionId: payment?.transactionId,
                     amount: courseDocuments.reduce((acc, curr) => {
                         if (curr.ourPrice) {
                             return acc + curr.ourPrice;
                         }
                         return acc + curr.price;
                     }, 0),
-                },
-                coupon: coupon
-            });
-            res.status(201).json({err:false,message:"order placed successfully ",data: order });
+                }
+            }).then((order)=>{
+                res.status(201).json({ err: false, message: "order placed successfully ", data: order });
+            }).catch((err)=>{
+                res.status(201).json({ err: true, message: "order failied", data: err });
+            })
         } catch (err) {
             console.error(err);
-            res.status(500).json({err:true, message: 'Internal server error' });
+            res.status(500).json({ err: true, message: 'Internal server error' });
         }
     },
-    payment:async(req,res)=>{
-        let status,error;
-        const {token,amount}=req.body;
-        console.log(token, amount);
+    payment: async (req, res) => {
+        let status, error;
+        const { amount } = req.body;
+        console.log(amount);
         try {
-            await Stripe.charges.create({
-                source:token.id,
-                amount,
-                currency:'usd'
-            })
-            status='success'
+            const paymentIntent = await Stripe.paymentIntents.create({
+                // amount: calculateOrderAmount(items),
+                amount: amount,
+                currency: "inr",
+                automatic_payment_methods: {
+                    enabled: true,
+                },
+            });
+            status = 'success'
+            res.status(200).json({ err: false, message: "payment successfull", status, clientSecret: paymentIntent.client_secret })
         } catch (error) {
             console.log(error);
-            status="failed"
+            status = "failed"
+            res.status(400).json({ err: true, message: "payment failed", status })
         }
-        res.status(200).json({err:false,message:"payment successfull",status})
+    },
+    successPayment:async(req,res)=>{
+        try {
+            const {clientSecret ,transactionId, status} = req.body;
+            const order = Order.findOne({client:clientSecret})
+            console.log(order,"orderrrr");
+            //extract course from here and push it to user
+        } catch (error) {
+            res.status(400).json({ err: true, message: "payment failed , if money debited refunded shortly", error })
+        }
     }
 }
 
