@@ -6,9 +6,9 @@ const Stripe = require('stripe')(process.env.SECRET_KEY)
 
 module.exports = {
     createOrder: async (req, res) => {
-        console.log(req.body,"body daaaaaaaaaa");
+        console.log(req.body, "body daaaaaaaaaa");
         try {
-            const { user, courses, payment, coupon ,client} = req.body;
+            const { user, courses, payment, coupon, client } = req.body;
             if (!mongoose.isValidObjectId(user)) {
                 return res.status(400).json({ err: true, message: 'User ID' });
             }
@@ -28,7 +28,7 @@ module.exports = {
             Order.create({
                 user: user,
                 coupon: coupon,
-                client:client,
+                client: client,
                 courses: courseDocuments.map(course => ({ course: course._id, price: course.ourPrice })),
                 payment: {
                     method: payment?.method,
@@ -40,9 +40,9 @@ module.exports = {
                         return acc + curr.price;
                     }, 0),
                 }
-            }).then((order)=>{
+            }).then((order) => {
                 res.status(201).json({ err: false, message: "order placed successfully ", data: order });
-            }).catch((err)=>{
+            }).catch((err) => {
                 res.status(201).json({ err: true, message: "order failied", data: err });
             })
         } catch (err) {
@@ -56,7 +56,6 @@ module.exports = {
         console.log(amount);
         try {
             const paymentIntent = await Stripe.paymentIntents.create({
-                // amount: calculateOrderAmount(items),
                 amount: amount,
                 currency: "inr",
                 automatic_payment_methods: {
@@ -71,12 +70,31 @@ module.exports = {
             res.status(400).json({ err: true, message: "payment failed", status })
         }
     },
-    successPayment:async(req,res)=>{
+    verifyPayment: async (req, res) => {
         try {
-            const {clientSecret ,transactionId, status} = req.body;
-            const order = Order.findOne({client:clientSecret})
-            console.log(order,"orderrrr");
-            //extract course from here and push it to user
+            const { clientSecret, transactionId, status } = req.body;
+            if (status === 'succeeded') {
+                const order = await Order.findOne({ client: clientSecret })
+                const courses = order.courses.map(course => course.course)
+                console.log(courses, "coursesssss");
+                await User.findByIdAndUpdate(order.user, {
+                    $addToSet: {
+                        coursesPurchased: { $each: courses },
+                    },
+                    $set: { cart: [] }
+                }, { new: true })
+                await Order.findByIdAndUpdate(order._id, {
+                    $set: {
+                        client: status,
+                        payment: {
+                            method: order.payment.method,
+                            transactionId: transactionId,
+                            amount: order.payment.amount
+                        }
+                    }
+                })
+                res.status(200).json({ err: false, message: "successfull" })
+            }
         } catch (error) {
             res.status(400).json({ err: true, message: "payment failed , if money debited refunded shortly", error })
         }

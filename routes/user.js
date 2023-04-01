@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { userLogin, userSignup, verifyEmail, sendOtp, viewPurchasedCourses } = require('../controllers/user');
+const { userLogin, userSignup, verifyEmail, viewPurchasedCourses } = require('../controllers/user');
 const { getAllCourses, getFreeCourses, getCourseByCategoryName, getPaidCourses, getCourseById, getCourseByCourseId } = require('../controllers/course');
 const { getCategory, getCategoryByName } = require('../controllers/category');
 const { addToCart, removeCourse, getCartCourses, addFreeCourse } = require('../controllers/cart');
 const { getAllLessonsByCourse, getAllLessonsByCourseId } = require('../controllers/lesson');
 const { verifyUser } = require('../middlewares/verifications');
 const { applyCoupon } = require('../controllers/coupon');
-const { createOrder, payment } = require('../controllers/order');
+const { createOrder, payment, verifyPayment } = require('../controllers/order');
 const { getBanner } = require('../controllers/banner');
 
 router.get('/test', (req, res) => {
@@ -57,6 +57,8 @@ router.post('/add-free-course',addFreeCourse)
 router.get('/banners',getBanner)
 
 router.post('/payment',payment)
+
+router.post('/confirm-payment',verifyPayment)
 
 
 module.exports = router
