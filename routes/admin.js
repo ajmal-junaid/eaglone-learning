@@ -7,7 +7,8 @@ const { addCoupon, deleteCoupon, getAllCoupons } = require('../controllers/coupo
 const { addCourse, getAllCourses, getCourseById, updateCourse } = require('../controllers/course');
 const { addLesson, getAllLessons, getALesson, updateLesson } = require('../controllers/lesson')
 const { verifyUser } = require('../middlewares/verifications');
-const { upload, uploadVideo } = require('../utils/multer')
+const { upload, uploadVideo } = require('../utils/multer');
+const { getAllOrders } = require('../controllers/order');
 
 router.post('/login', adminLogin);
 
@@ -51,5 +52,6 @@ router.get('/banners', getBanner)
 
 router.delete('/delete-banner/:id',deleteBanner)
 
+router.get('/orders',getAllOrders)
 
 module.exports = router

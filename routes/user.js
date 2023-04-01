@@ -7,7 +7,7 @@ const { addToCart, removeCourse, getCartCourses, addFreeCourse } = require('../c
 const { getAllLessonsByCourse, getAllLessonsByCourseId } = require('../controllers/lesson');
 const { verifyUser } = require('../middlewares/verifications');
 const { applyCoupon } = require('../controllers/coupon');
-const { createOrder, payment, verifyPayment } = require('../controllers/order');
+const { createOrder, payment, verifyPayment, getOrders } = require('../controllers/order');
 const { getBanner } = require('../controllers/banner');
 
 router.get('/test', (req, res) => {
@@ -59,6 +59,8 @@ router.get('/banners',getBanner)
 router.post('/payment',payment)
 
 router.post('/confirm-payment',verifyPayment)
+
+router.get('/get-orders/:id',getOrders)
 
 
 module.exports = router

@@ -43,7 +43,7 @@ module.exports = {
             }).then((order) => {
                 res.status(201).json({ err: false, message: "order placed successfully ", data: order });
             }).catch((err) => {
-                res.status(201).json({ err: true, message: "order failied", data: err });
+                res.status(201).json({ err: true, message: "order failed", data: err });
             })
         } catch (err) {
             console.error(err);
@@ -75,8 +75,9 @@ module.exports = {
             const { clientSecret, transactionId, status } = req.body;
             if (status === 'succeeded') {
                 const order = await Order.findOne({ client: clientSecret })
+                console.log(order,"clientSecret");
                 const courses = order.courses.map(course => course.course)
-                console.log(courses, "coursesssss");
+                console.log(courses);
                 await User.findByIdAndUpdate(order.user, {
                     $addToSet: {
                         coursesPurchased: { $each: courses },
@@ -94,9 +95,31 @@ module.exports = {
                     }
                 })
                 res.status(200).json({ err: false, message: "successfull" })
+            }else{
+                res.status(400).json({ err: true, message: "failed" })
             }
         } catch (error) {
-            res.status(400).json({ err: true, message: "payment failed , if money debited refunded shortly", error })
+            console.log(error)
+            res.status(500).json({ err: true, message: "payment failed , if money debited, contact us", error })
+        }
+    },
+    getOrders:async (req,res)=>{
+        try {
+            const userId = req.params.id;
+            const orders = await Order.find({user:userId})
+            if(!orders) return res.status(404).json({err:true,message:"no orders found on this user"})
+            return res.status(200).json({err:false,message:"orders fetched" , data:orders})
+        } catch (error) {
+            res.status(500).json({ err: true, message: "Something went wrong", error })
+        }
+    },
+    getAllOrders:async(req,res)=>{
+        try {
+            const orders = await Order.find().sort({ createdAt: -1 })
+            if(!orders) return res.status(404).json({err:true,message:"no orders found in Db"})
+            return res.status(200).json({err:false,message:"orders fetched" , data:orders})
+        } catch (error) {
+            res.status(500).json({ err: true, message: "Something went wrong", error })
         }
     }
 }
