@@ -8,10 +8,13 @@ module.exports = {
     createOrder: async (req, res) => {
         console.log(req.body, "body daaaaaaaaaa");
         try {
-            const { user, courses, payment, coupon, client } = req.body;
+            const { user, payment, coupon, client } = req.body;
             if (!mongoose.isValidObjectId(user)) {
                 return res.status(400).json({ err: true, message: 'User ID' });
             }
+            const cartList = await User.findById(user).select('cart')
+            
+            const courses = cartList.cart
             const userCoursesPurchased = await User.findById(user).select('coursesPurchased')
             const purchasedCourseIds = userCoursesPurchased.coursesPurchased.map(course => course.toString());
             if (purchasedCourseIds.length) {
