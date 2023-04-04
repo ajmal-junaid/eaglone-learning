@@ -113,5 +113,26 @@ module.exports = {
         } catch (error) {
             return res.status(212).json({ err: true, message: "Something Went Wrong", reason: error })
         }
+    },
+    searchCourse: async (req, res) => {
+        try {
+            let result = await Course.find({
+                "$or": [
+                    {
+                        title: { $regex: new RegExp(req.params.key, 'i') }
+                      },
+                      {
+                        courseId: { $regex: new RegExp(req.params.key, 'i') }
+                      },
+                      {
+                        category: { $regex: new RegExp(req.params.key, 'i') }
+                      }
+                ]
+            })
+            if (!result.length) return res.status(404).json({ err: true, message: "course not found", data: null })
+            return res.status(200).json({ err: false, message: "courses fetched successfully", data: result })
+        } catch (error) {
+            return res.status(500).json({ err: true, message: "Something Went Wrong", reason: error })
+        }
     }
 }
