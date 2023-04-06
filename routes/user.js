@@ -9,6 +9,7 @@ const { verifyUser } = require('../middlewares/verifications');
 const { applyCoupon } = require('../controllers/coupon');
 const { createOrder, payment, verifyPayment, getOrders } = require('../controllers/order');
 const { getBanner } = require('../controllers/banner');
+const { getMessages } = require('../controllers/community');
 
 router.get('/test', (req, res) => {
     console.log("api is working");
@@ -63,6 +64,8 @@ router.post('/confirm-payment',verifyPayment)
 router.get('/get-orders/:id',getOrders)
 
 router.get('/search/:key',searchCourse)
+
+router.get('/community',getMessages)
 
 
 module.exports = router
