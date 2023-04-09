@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { userLogin, userSignup, verifyEmail, viewPurchasedCourses } = require('../controllers/user');
+const { userLogin, userSignup, verifyEmail, viewPurchasedCourses, forgotPassword } = require('../controllers/user');
 const { getAllCourses, getFreeCourses, getCourseByCategoryName, getPaidCourses, getCourseById, getCourseByCourseId, searchCourse } = require('../controllers/course');
 const { getCategory, getCategoryByName } = require('../controllers/category');
 const { addToCart, removeCourse, getCartCourses, addFreeCourse } = require('../controllers/cart');
@@ -25,49 +25,51 @@ router.get('/courses', getAllCourses)
 
 router.get('/categories', getCategory)
 
-router.get('/free-courses',getFreeCourses)
+router.get('/free-courses', getFreeCourses)
 
-router.get('/paid-courses',getPaidCourses)
+router.get('/paid-courses', getPaidCourses)
 
-router.get('/get-course-category/:id',getCourseByCategoryName)
+router.get('/get-course-category/:id', getCourseByCategoryName)
 
-router.get('/course/:id',getCourseByCourseId)
+router.get('/course/:id', getCourseByCourseId)
 
-router.get('/get-lessons-course/:id',getAllLessonsByCourse)
+router.get('/get-lessons-course/:id', getAllLessonsByCourse)
 
-router.get('/category-details/:id',getCategoryByName)
+router.get('/category-details/:id', getCategoryByName)
 
-router.post('/add-to-cart',verifyUser,addToCart)
+router.post('/add-to-cart', verifyUser, addToCart)
 
-router.post('/remove-from-cart',removeCourse)
+router.post('/remove-from-cart', removeCourse)
 
-router.get('/get-cart',getCartCourses)
+router.get('/get-cart', getCartCourses)
 
-router.post('/apply-coupon',applyCoupon)
+router.post('/apply-coupon', applyCoupon)
 
-router.post('/create-order',createOrder)
+router.post('/create-order', createOrder)
 
-router.get('/get-purchased-courses/:id',viewPurchasedCourses)
+router.get('/get-purchased-courses/:id', viewPurchasedCourses)
 
-router.get('/get-lessons-pcourse/:id',getAllLessonsByCourseId)
+router.get('/get-lessons-pcourse/:id', getAllLessonsByCourseId)
 
-router.get('/cours/:id',getCourseById)
+router.get('/cours/:id', getCourseById)
 
-router.post('/add-free-course',addFreeCourse)
+router.post('/add-free-course', addFreeCourse)
 
-router.get('/banners',getBanner)
+router.get('/banners', getBanner)
 
-router.post('/payment',payment)
+router.post('/payment', payment)
 
-router.post('/confirm-payment',verifyPayment)
+router.post('/confirm-payment', verifyPayment)
 
-router.get('/get-orders/:id',getOrders)
+router.get('/get-orders/:id', getOrders)
 
-router.get('/search/:key',searchCourse)
+router.get('/search/:key', searchCourse)
 
-router.get('/community',getMessages)
+router.get('/community', getMessages)
 
-router.get('/video',getVideo)
+router.get('/video', getVideo)
+
+router.post('/forgot-password', forgotPassword)
 
 
 module.exports = router
