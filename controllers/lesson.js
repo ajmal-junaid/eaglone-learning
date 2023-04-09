@@ -1,4 +1,11 @@
 const Lesson = require('../models/lesson');
+const { HttpRequest } = require("@aws-sdk/protocol-http");
+const { S3RequestPresigner } = require("@aws-sdk/s3-request-presigner");
+const { parseUrl } = require("@aws-sdk/url-parser");
+const { Sha256 } = require("@aws-crypto/sha256-browser");
+const { Hash } = require("@aws-sdk/hash-node");
+const { formatUrl } = require("@aws-sdk/util-format-url");
+
 
 module.exports = {
     isLessonExists: async (lessonId) => {
@@ -83,9 +90,30 @@ module.exports = {
     },
     getAllLessonsByCourseId: async (req, res) => {
         try {
-            const lessons = await Lesson.find({ course: req.params.id })
-            if (!lessons) return res.status(404).json({ err: true, message: 'lessons not found under this course' })
+            const lessons = await Lesson.find({ course: req.params.id }).select("-video")
+            if (!lessons.length) return res.status(404).json({ err: true, message: 'no lesson found under this course' })
             return res.status(200).json({ message: "lessons fetched succesfully", data: lessons })
+        } catch (error) {
+            return res.status(500).json({ err: true, message: "operation failed ", reason: error })
+        }
+    },
+    getVideo: async (req, res) => {
+        try {
+            const lessonId = req.query.id
+            const lesson = await Lesson.findOne({ _id: lessonId })
+            if (!lesson) return res.status(404).json({ err: true, message: "No Lesson found" })
+            const s3ObjectUrl = parseUrl(lesson.video);
+            const presigner = new S3RequestPresigner({
+                credentials: {
+                    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+                },
+                region: "us-west-2",
+                sha256: Hash.bind(null, "sha256"),
+            });
+            const url = await presigner.presign(new HttpRequest(s3ObjectUrl));
+            console.log(formatUrl(url),"opopo");
+            return res.status(200).json({ message: "video fetched succesfully", data: formatUrl(url) })
         } catch (error) {
             return res.status(500).json({ err: true, message: "operation failed ", reason: error })
         }

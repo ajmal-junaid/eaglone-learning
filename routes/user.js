@@ -4,7 +4,7 @@ const { userLogin, userSignup, verifyEmail, viewPurchasedCourses } = require('..
 const { getAllCourses, getFreeCourses, getCourseByCategoryName, getPaidCourses, getCourseById, getCourseByCourseId, searchCourse } = require('../controllers/course');
 const { getCategory, getCategoryByName } = require('../controllers/category');
 const { addToCart, removeCourse, getCartCourses, addFreeCourse } = require('../controllers/cart');
-const { getAllLessonsByCourse, getAllLessonsByCourseId } = require('../controllers/lesson');
+const { getAllLessonsByCourse, getAllLessonsByCourseId, getVideo } = require('../controllers/lesson');
 const { verifyUser } = require('../middlewares/verifications');
 const { applyCoupon } = require('../controllers/coupon');
 const { createOrder, payment, verifyPayment, getOrders } = require('../controllers/order');
@@ -66,6 +66,8 @@ router.get('/get-orders/:id',getOrders)
 router.get('/search/:key',searchCourse)
 
 router.get('/community',getMessages)
+
+router.get('/video',getVideo)
 
 
 module.exports = router

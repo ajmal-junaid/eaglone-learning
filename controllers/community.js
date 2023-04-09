@@ -3,7 +3,6 @@ const Community = require('../models/community')
 module.exports = {
     joinRoom: async (roomId) => {
         try {
-            console.log(roomId, "rooommmmmmm");
             const room = await Community.findOne({ roomId: roomId })
             if (!room) {
                 const success = await Community.create({ roomId: roomId })
@@ -15,7 +14,6 @@ module.exports = {
         }
     },
     addMessage: async (data) => {
-        console.log(data, "data daaaaa");
         try {
             Community.findOneAndUpdate(
                 { roomId: data.room },

@@ -3,7 +3,7 @@ const multerS3 = require('multer-s3');
 const s3 = require('./awsbucket');
 const storage = multerS3({
     s3: s3,
-    bucket: process.env.AWS_S3_BUCKET_NAME,
+    bucket: process.env.AWS_S3_BUCKET_PUBLIC,
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);

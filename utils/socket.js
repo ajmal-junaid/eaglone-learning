@@ -13,13 +13,10 @@ function initializeSocket(server) {
     socket.on("join_room", (data) => {
       joinRoom(data)
       socket.join(data);
-      
-      console.log(`user:  ${socket.id} , joined room :${data}`)
     })
 
     socket.on("send_message", (data) => {
       addMessage(data)
-      console.log(data,"log daaaaaa")
       socket.to(data.room).emit("recieve_message", data)
     })
 
