@@ -12,7 +12,7 @@ module.exports = {
             req.body.courseId = courseId.toLowerCase()
             const course = await Course.findOne({ courseId: req.body.courseId })
             if (course) return res.status(409).json({ err: true, message: "Course with this Id is Already Exists" })
-            const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${req.file.key}` : category.image;
+            const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_PUBLIC}.s3.amazonaws.com/${req.file.key}` : category.image;
             req.body.image = imageUrl;
             req.body.rating = 0;
             req.body.classes = 0;
@@ -82,7 +82,7 @@ module.exports = {
             if (!course) return res.status(204).json({ err: true, message: "No course found" })
 
             if (req.file != undefined) {
-                const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${req.file.key}` : category.image;
+                const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_PUBLIC}.s3.amazonaws.com/${req.file.key}` : category.image;
                 req.body.image = imageUrl;
             } else {
                 req.body.image = course.image;

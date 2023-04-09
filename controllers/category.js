@@ -13,13 +13,14 @@ module.exports = {
             req.body.name = name.toUpperCase();
             const category = await Category.findOne({ name: req.body.name })
             if (category) return res.status(208).json({ err: true, message: "Category Already Exists" })
-            const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${req.file.key}` : null;
+            const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_PUBLIC}.s3.amazonaws.com/${req.file.key}` : null;
             req.body.image = imageUrl;
             req.body.coursecount = 0;
             const success = await Category.create(req.body)
             if (success) return res.status(201).json({ message: "Category Added Succesfully" })
             return res.status(201).json({ err: true, message: "Category Creation Failed" })
         } catch (error) {
+            console.log(error);
             return res.status(212).json({ err: true, message: "something Wrong", reason: error })
         }
     },
@@ -47,7 +48,7 @@ module.exports = {
         try {
             const category = await Category.findOne({ _id: req.params.id })
             if (!category) return res.status(204).json({ err: true, message: "No category found" })
-            const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${req.file.key}` : category.image;
+            const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_PUBLIC}.s3.amazonaws.com/${req.file.key}` : category.image;
             req.body.image = imageUrl;
 
             const result = await Category.updateOne(
