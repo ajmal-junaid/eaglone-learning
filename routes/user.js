@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { userLogin, userSignup, verifyEmail, viewPurchasedCourses, forgotPassword, resetPassword } = require('../controllers/user');
-const { getAllCourses, getFreeCourses, getCourseByCategoryName, getPaidCourses, getCourseById, getCourseByCourseId, searchCourse } = require('../controllers/course');
+const { getAllCourses, getFreeCourses, getCourseByCategoryName, getPaidCourses, getCourseById, getCourseByCourseId, searchCourse, rateCourse } = require('../controllers/course');
 const { getCategory, getCategoryByName } = require('../controllers/category');
 const { addToCart, removeCourse, getCartCourses, addFreeCourse } = require('../controllers/cart');
 const { getAllLessonsByCourse, getAllLessonsByCourseId, getVideo } = require('../controllers/lesson');
@@ -45,15 +45,15 @@ router.get('/get-cart', getCartCourses)
 
 router.post('/apply-coupon', applyCoupon)
 
-router.post('/create-order', createOrder)
+router.post('/create-order',verifyUser, createOrder)
 
-router.get('/get-purchased-courses/:id', viewPurchasedCourses)
+router.get('/get-purchased-courses/:id',verifyUser, viewPurchasedCourses)
 
 router.get('/get-lessons-pcourse/:id', getAllLessonsByCourseId)
 
 router.get('/cours/:id', getCourseById)
 
-router.post('/add-free-course', addFreeCourse)
+router.post('/add-free-course',verifyUser, addFreeCourse)
 
 router.get('/banners', getBanner)
 
@@ -61,17 +61,19 @@ router.post('/payment', payment)
 
 router.post('/confirm-payment', verifyPayment)
 
-router.get('/get-orders/:id', getOrders)
+router.get('/get-orders/:id',verifyUser, getOrders)
 
 router.get('/search/:key', searchCourse)
 
-router.get('/community', getMessages)
+router.get('/community',verifyUser, getMessages)
 
-router.get('/video', getVideo)
+router.get('/video',verifyUser, getVideo)
 
 router.post('/forgot-password', forgotPassword)
 
-router.post('/reset-password',resetPassword)
+router.post('/reset-password',resetPassword);
+
+router.post('/rate-course',verifyUser,rateCourse)
 
 
 module.exports = router

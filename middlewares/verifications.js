@@ -44,6 +44,7 @@ module.exports = {
                             return res.status(401).json({ err: true, message: "some other error occurred", reason: err })
                         }
                     } else {
+                        req.token=decoded._id;
                         next()
                     }
                 })

@@ -1,6 +1,24 @@
 const mongoose = require('mongoose');
 const connection = require('../utils/database');
 
+const ratingSchema = new mongoose.Schema({
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    rating: {
+      type: Number,
+      min: 1,
+      max: 5,
+      required: true
+    },
+    comment: {
+      type: String,
+      required: false
+    }
+  }, { timestamps: true });
+
 const courseSchema = ({
     title: {
         type: String,
@@ -46,10 +64,7 @@ const courseSchema = ({
         type: Boolean,
         required: true
     },
-    rating: {
-        type: Number,
-        required: false
-    }
+    rating: [ratingSchema]
 })
 
 const Course = connection.model('Course', courseSchema);

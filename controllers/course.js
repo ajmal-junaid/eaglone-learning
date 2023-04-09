@@ -120,18 +120,34 @@ module.exports = {
                 "$or": [
                     {
                         title: { $regex: new RegExp(req.params.key, 'i') }
-                      },
-                      {
+                    },
+                    {
                         courseId: { $regex: new RegExp(req.params.key, 'i') }
-                      },
-                      {
+                    },
+                    {
                         category: { $regex: new RegExp(req.params.key, 'i') }
-                      }
+                    }
                 ]
             })
             if (!result.length) return res.status(404).json({ err: true, message: "course not found", data: null })
             return res.status(200).json({ err: false, message: "courses fetched successfully", data: result })
         } catch (error) {
+            return res.status(500).json({ err: true, message: "Something Went Wrong", reason: error })
+        }
+    },
+    rateCourse: async (req, res) => {
+        try {
+            const { courseId, rating, comment } = req.body
+            const userId = req.token
+            const course = await Course.findById(courseId)
+            const isRatingExists = course.rating.find(rating=>rating.user.toString()===userId);
+            if(isRatingExists) return res.status(400).json({err:true,message:"you have already rated this course"});
+            const newRating = {user:userId,rating:rating,comment:comment};
+            course.rating.push(newRating);
+            await course.save();
+            res.status(201).json({err:false,message:"course rated successfully"})
+        } catch (error) {
+            console.log(error);
             return res.status(500).json({ err: true, message: "Something Went Wrong", reason: error })
         }
     }
