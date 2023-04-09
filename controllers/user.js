@@ -125,16 +125,33 @@ module.exports = {
                 from: process.env.YOUR_EMAIL,
                 to: email,
                 subject: 'Password reset',
-                text: `Please click on the following link to reset your password: http://localhost:3000/reset-password/${tokenValue}`,
+                text: `Please click on the following link to reset your password: http://localhost:3001/user/reset-password/${tokenValue}`,
             };
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                  console.log(error);
+                    console.log(error);
                 } else {
-                  console.log(`Email sent: ${info.response}`);
+                    console.log(`Email sent: ${info.response}`);
                 }
-              });
-              res.status(200).json({err:false, message: 'Password reset link sent to your email' });
+            });
+            res.status(200).json({ err: false, message: 'Password reset link sent to your email' });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ err: true, message: "Something went wrong", error: error })
+        }
+    },
+    resetPassword: async (req, res) => {
+        try {
+            const { tokenValue, newPassword, email } = req.body;
+            const user = await User.findOne({ email: email })
+            if (!user) return res.status(404).json({ err: true, message: "User Not Found" })
+            if (!user.otp) return res.status(404).json({ err: true, message: "Token Expired, Try again ...." })
+            if (tokenValue !== user.otp) return res.status(404).json({ err: true, message: "Invalid Token ...." })
+            user.password = newPassword;
+            user.active = true;
+            user.otp = undefined;
+            await user.save();
+            return res.status(200).json({ err: false, message: "Password reset Successfull" })
         } catch (error) {
             console.log(error);
             return res.status(500).json({ err: true, message: "Something went wrong", error: error })

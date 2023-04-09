@@ -28,6 +28,11 @@ const userSchema = new mongoose.Schema({
         required: false,
         expires: '5m'
     },
+    attempts: {
+        type: Number,
+        required: false,
+        expires: '5m'
+    },
     cart: {
         type: [mongoose.Schema.Types.ObjectId],
         default: []
