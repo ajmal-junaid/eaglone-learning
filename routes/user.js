@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { userLogin, userSignup, verifyEmail, viewPurchasedCourses, forgotPassword } = require('../controllers/user');
+const { userLogin, userSignup, verifyEmail, viewPurchasedCourses, forgotPassword, resetPassword } = require('../controllers/user');
 const { getAllCourses, getFreeCourses, getCourseByCategoryName, getPaidCourses, getCourseById, getCourseByCourseId, searchCourse } = require('../controllers/course');
 const { getCategory, getCategoryByName } = require('../controllers/category');
 const { addToCart, removeCourse, getCartCourses, addFreeCourse } = require('../controllers/cart');
@@ -70,6 +70,8 @@ router.get('/community', getMessages)
 router.get('/video', getVideo)
 
 router.post('/forgot-password', forgotPassword)
+
+router.post('/reset-password',resetPassword)
 
 
 module.exports = router

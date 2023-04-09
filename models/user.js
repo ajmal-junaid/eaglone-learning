@@ -26,12 +26,14 @@ const userSchema = new mongoose.Schema({
     otp: {
         type: String,
         required: false,
-        expires: '5m'
+        expires: '5m',
+        index: { expires: '5m'}
     },
     attempts: {
         type: Number,
         required: false,
-        expires: '5m'
+        expires: '5m',
+        index: { expires: '5m',expireAfterSeconds: 300 }
     },
     cart: {
         type: [mongoose.Schema.Types.ObjectId],

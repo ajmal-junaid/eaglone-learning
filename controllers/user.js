@@ -77,16 +77,30 @@ module.exports = {
     userLogin: async (req, res) => {
         try {
             const user = await User.findOne({ email: req.body.email });
+            console.log(user, req.body.email);
             if (user) {
-                const result = await bcrypt.compare(req.body.password, user.password);
-                if (result) {
-                    if (!user.active) return res.status(400).json({ err: true, message: "User is Deactivated,Contact Admin" })
-                    Jwt.sign({ name: user.name, email: user.email, mobile: user.mobile, _id: user._id }, jwtKey, { expiresIn: 86400 }, (err, token) => {
-                        if (err) return res.status(500).json({ err: true, message: "error in token generation" })
-                        if (token) return res.status(200).json({ err: false, token: token, message: "Logged In Succesfully" })
-                    })
+                if (!user.attempts || user.attempts < 5) {
+                    const result = await bcrypt.compare(req.body.password, user.password);
+                    if (result) {
+                        if (!user.active) return res.status(400).json({ err: true, message: "User is Deactivated,Contact Admin/try forgot password" })
+                        Jwt.sign({ name: user.name, email: user.email, mobile: user.mobile, _id: user._id }, jwtKey, { expiresIn: 86400 }, (err, token) => {
+                            if (err) return res.status(500).json({ err: true, message: "error in token generation" })
+                            if (token) return res.status(200).json({ err: false, token: token, message: "Logged In Succesfully" })
+                        })
+                    } else {
+                        if (user.attempts) {
+                            user.attempts++;
+                            if(user.attempts===5){
+                                user.active=false;
+                            }
+                        } else {
+                            user.attempts = 1;
+                        }
+                        user.save()
+                        return res.status(401).json({ err: true, message: "wrong password" })
+                    }
                 } else {
-                    return res.status(401).json({ err: true, message: "wrong password" })
+                    return res.status(305).json({ err: true, message: "Limit Reached,Try again after five minutes/Reset Password" })
                 }
             } else {
                 return res.status(404).json({ err: true, message: "user not found" })
@@ -142,14 +156,15 @@ module.exports = {
     },
     resetPassword: async (req, res) => {
         try {
-            const { tokenValue, newPassword, email } = req.body;
-            const user = await User.findOne({ email: email })
-            if (!user) return res.status(404).json({ err: true, message: "User Not Found" })
+            const { tokenValue, newPassword } = req.body;
+            const user = await User.findOne({ otp: tokenValue })
+            if (!user) return res.status(404).json({ err: true, message: "Invalid Token ...." })
             if (!user.otp) return res.status(404).json({ err: true, message: "Token Expired, Try again ...." })
-            if (tokenValue !== user.otp) return res.status(404).json({ err: true, message: "Invalid Token ...." })
-            user.password = newPassword;
+            if (tokenValue !== user.otp) return res.status(404).json({ err: true, message: "Invalid Token ...." })  
+            user.password = await bcrypt.hash(newPassword, 10);
             user.active = true;
             user.otp = undefined;
+            user.attempts = 0;
             await user.save();
             return res.status(200).json({ err: false, message: "Password reset Successfull" })
         } catch (error) {
