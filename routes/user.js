@@ -39,11 +39,11 @@ router.get('/category-details/:id', getCategoryByName)
 
 router.post('/add-to-cart', verifyUser, addToCart)
 
-router.post('/remove-from-cart', removeCourse)
+router.post('/remove-from-cart',verifyUser, removeCourse)
 
-router.get('/get-cart', getCartCourses)
+router.get('/get-cart',verifyUser, getCartCourses)
 
-router.post('/apply-coupon', applyCoupon)
+router.post('/apply-coupon',verifyUser, applyCoupon)
 
 router.post('/create-order',verifyUser, createOrder)
 

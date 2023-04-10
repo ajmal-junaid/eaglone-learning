@@ -12,46 +12,46 @@ const { getAllOrders } = require('../controllers/order');
 
 router.post('/login', adminLogin);
 
-router.get('/users', getAllUsers);
+router.get('/users', verifyUser, getAllUsers);
 
-router.post("/add-category", upload.single("image"), addCategory);
+router.post("/add-category", verifyUser, upload.single("image"), addCategory);
 
-router.get('/categories', getCategory)
+router.get('/categories', verifyUser, getCategory)
 
-router.post("/add-course", upload.single('image'), addCourse);
+router.post("/add-course", verifyUser, upload.single('image'), addCourse);
 
 router.get('/courses', verifyUser, getAllCourses)
 
-router.get('/course/:id', getCourseById)
+router.get('/course/:id', verifyUser, getCourseById)
 
-router.put("/update-course/:id", upload.single('image'), updateCourse);
+router.put("/update-course/:id", verifyUser, upload.single('image'), updateCourse);
 
-router.get('/category/:id', getCategoryById)
+router.get('/category/:id', verifyUser, getCategoryById)
 
-router.put("/update-category/:id", upload.single('image'), updateCategory);
+router.put("/update-category/:id", verifyUser, upload.single('image'), updateCategory);
 
-router.delete('/delete-category/:id', deleteCategoryById)
+router.delete('/delete-category/:id', verifyUser, deleteCategoryById)
 
-router.post('/add-lesson', uploadVideo.single('video'), addLesson);
+router.post('/add-lesson', verifyUser, uploadVideo.single('video'), addLesson);
 
-router.get('/lessons', getAllLessons)
+router.get('/lessons', verifyUser, getAllLessons)
 
-router.get('/lesson/:id', getALesson)
+router.get('/lesson/:id', verifyUser, getALesson)
 
-router.put('/update-lesson/:id', uploadVideo.single('video'), updateLesson);
+router.put('/update-lesson/:id', verifyUser, uploadVideo.single('video'), updateLesson);
 
-router.post('/add-coupon', addCoupon)
+router.post('/add-coupon', verifyUser, addCoupon)
 
-router.delete('/delete-coupon/:id', deleteCoupon)
+router.delete('/delete-coupon/:id', verifyUser, deleteCoupon)
 
-router.get('/coupons', getAllCoupons)
+router.get('/coupons', verifyUser, getAllCoupons)
 
-router.post('/add-banner',upload.single('image'), addBanner)
+router.post('/add-banner', verifyUser, upload.single('image'), addBanner)
 
-router.get('/banners', getBanner)
+router.get('/banners', verifyUser, getBanner)
 
-router.delete('/delete-banner/:id',deleteBanner)
+router.delete('/delete-banner/:id', verifyUser, deleteBanner)
 
-router.get('/orders',getAllOrders)
+router.get('/orders',verifyUser, getAllOrders)
 
 module.exports = router
