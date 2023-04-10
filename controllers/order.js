@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Order = require('../models/order');
 const Course = require('../models/course');
 const User = require('../models/user');
-const Stripe = require('stripe')(process.env.SECRET_KEY)
+const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 module.exports = {
     createOrder: async (req, res) => {
