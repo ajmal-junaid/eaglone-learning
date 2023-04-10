@@ -52,6 +52,6 @@ router.get('/banners', verifyUser, getBanner)
 
 router.delete('/delete-banner/:id', verifyUser, deleteBanner)
 
-router.get('/orders',verifyUser, getAllOrders)
+router.get('/orders', verifyUser, getAllOrders)
 
 module.exports = router
