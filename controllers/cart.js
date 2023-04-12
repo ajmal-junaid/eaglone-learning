@@ -73,17 +73,17 @@ module.exports = {
         try {
             const { userId } = req.query;
             if (!mongoose.isValidObjectId(userId)) {
-                return res.status(400).json({ err: true, message: 'Invalid user ID' });
+                return res.status(400).json({ err: true, message: 'Invalid user ID',data:[] });
             }
             const user = await User.findById(userId).populate({
                 path: 'cart',
                 model: 'Course'
             });
             if (!user) {
-                return res.status(404).json({ err: true, message: 'User Not Found' });
+                return res.status(404).json({ err: true, message: 'User Not Found',data:[] });
             }
             const cart = user.cart;
-            if (!cart.length > 0) return res.status(404).json({ err: true, message: 'Cart is empty' });
+            if (!cart.length > 0) return res.status(404).json({ err: true, message: 'Cart is empty',data:[] });
             const cartDetails = cart.map(course => ({
                 _id: course._id,
                 title: course.title,
@@ -94,10 +94,10 @@ module.exports = {
                 percentage: course.percentage,
                 premium: course.premium
             }));
-            res.status(200).json({ err: false, data: cartDetails });
+            res.status(200).json({ err: false, data: cartDetails ,message: 'Cart fetched successfully' });
         } catch (error) {
             console.log(error);
-            res.status(500).json({ err: true, message: 'Something Went Wrong' });
+            res.status(500).json({ err: true, message: 'Something Went Wrong',data:[] });
         }
     }
 
