@@ -111,6 +111,7 @@ module.exports = {
             if (!course) return res.status(204).json({ err: true, message: "No course found" })
             return res.status(200).json({ message: "Course fetched Successfully", data: course })
         } catch (error) {
+            console.log(error)
             return res.status(212).json({ err: true, message: "Something Went Wrong", reason: error })
         }
     },

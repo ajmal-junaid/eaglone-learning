@@ -52,9 +52,8 @@ module.exports = {
         }
     },
     payment: async (req, res) => {
-        let status, error;
+        let status;
         const { amount } = req.body;
-        console.log(amount);
         try {
             const paymentIntent = await Stripe.paymentIntents.create({
                 amount: amount,
@@ -76,9 +75,7 @@ module.exports = {
             const { clientSecret, transactionId, status } = req.body;
             if (status === 'succeeded') {
                 const order = await Order.findOne({ client: clientSecret })
-                console.log(order,"clientSecret");
                 const courses = order.courses.map(course => course.course)
-                console.log(courses);
                 await User.findByIdAndUpdate(order.user, {
                     $addToSet: {
                         coursesPurchased: { $each: courses },

@@ -66,7 +66,6 @@ module.exports = {
             await user.save();
             Jwt.sign({ name: user.name, email: user.email, mobile: user.mobile, _id: user._id }, jwtKey, { expiresIn: 86400 }, (err, token) => {
                 if (err) return res.status(212).json({ err: true, message: "error in token generation" })
-                console.log(token, err);
                 if (token) return res.status(200).json({ token, success: true, message: "Email verified successfully" })
             })
         } catch (error) {
@@ -77,7 +76,6 @@ module.exports = {
     userLogin: async (req, res) => {
         try {
             const user = await User.findOne({ email: req.body.email });
-            console.log(user, req.body.email);
             if (user) {
                 if (!user.attempts || user.attempts < 5) {
                     const result = await bcrypt.compare(req.body.password, user.password);

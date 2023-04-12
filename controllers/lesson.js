@@ -112,9 +112,9 @@ module.exports = {
                 sha256: Hash.bind(null, "sha256"),
             });
             const url = await presigner.presign(new HttpRequest(s3ObjectUrl));
-            console.log(formatUrl(url),"opopo");
             return res.status(200).json({ message: "video fetched succesfully", data: formatUrl(url) })
         } catch (error) {
+            console.log(error)
             return res.status(500).json({ err: true, message: "operation failed ", reason: error })
         }
     }
