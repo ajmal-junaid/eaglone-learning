@@ -3,10 +3,11 @@ const { joinRoom, addMessage } = require('../controllers/community')
 function initializeSocket(server) {
   const io = new Server(server, {
     cors: {
-      origin: ['https://www.eaglone.online','http://localhost:4000','http://localhost:3001', '*']
+      origin: "https://eaglone.online",
+      methods: ["GET", "POST"],
+      allowedHeaders: ["Content-Type"]
     }
   });
-
   io.on("connection", (socket) => {
     console.log(`user connected to : ${socket.id}`)
     
