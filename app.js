@@ -23,8 +23,8 @@ app.get('/', function(req, res) {
   });
 const { verifyApiKey } = require('./middlewares/verifications')
 app.use(verifyApiKey)
-app.use('/v1/', userRoutes)
-app.use('/v1/admin/', adminRoutes)
+app.use('/api/v1', userRoutes)
+app.use('/api/v1/admin', adminRoutes)
 process.setMaxListeners(15); // (node:16026) MaxListenersExceededWarning to avoid this err
 server.listen(PORT, error => {
     if (error) console.log(error, "connection failed")
