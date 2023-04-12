@@ -11,8 +11,8 @@ const { createOrder, payment, verifyPayment, getOrders } = require('../controlle
 const { getBanner } = require('../controllers/banner');
 const { getMessages } = require('../controllers/community');
 
-router.get('/test', (req, res) => {
-    console.log("api is working");
+router.get('/', (req, res) => {
+    console.log("api for user is working");
     res.status(200).json({ apiWorking: true, data: "api is working try with key" })
 })
 router.post('/user-signup', userSignup)
