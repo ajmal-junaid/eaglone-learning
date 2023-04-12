@@ -6,6 +6,7 @@ const http = require('http')
 const { Server } = require('socket.io')
 const server = http.createServer(app);
 const { initializeSocket } = require('./utils/socket');
+const PORT = 4000
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,13 +20,12 @@ const userRoutes = require('./routes/user')
 const adminRoutes = require('./routes/admin')
 const { verifyApiKey } = require('./middlewares/verifications')
 app.use(verifyApiKey)
-app.use('/', userRoutes)
-app.use('/admin', adminRoutes)
+app.use('/api/v1/', userRoutes)
+app.use('/admin/api/v1/', adminRoutes)
 process.setMaxListeners(15); // (node:16026) MaxListenersExceededWarning to avoid this err
-//app.listen(3000, '192.168.64.140'); //space ip
-server.listen(3000, error => {
+server.listen(PORT, error => {
     if (error) console.log(error, "connection failed")
-    console.log("server is running on Port 3000");
+    console.log(`server is running on Port ${PORT}`);
 });
 
 
