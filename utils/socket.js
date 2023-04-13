@@ -3,7 +3,7 @@ const { joinRoom, addMessage } = require('../controllers/community')
 function initializeSocket(server) {
   const io = new Server(server, {
     cors: {
-      origin: "https://eaglone.online"
+      origin: ["https://eaglone.online","https://www.eaglone.online"]
     }
   });
   io.on("connection", (socket) => {
