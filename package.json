@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
-    "lint": "eslint --ignore-path .gitignore . --fix"
+    "lint": "eslint --ignore-path .gitignore . --fix",
+    "format": "prettier --write \"src/**/*.js\""
   },
   "author": "",
   "license": "ISC",
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "eslint": "^8.38.0",
-    "eslint-plugin-node": "^11.1.0"
+    "eslint-plugin-node": "^11.1.0",
+    "prettier": "^2.8.7"
   }
 }
