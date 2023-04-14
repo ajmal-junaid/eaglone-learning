@@ -24,7 +24,7 @@ module.exports = {
                 res.status(500).json({ err: true, message: "API-KEY not found" })
             }
         } catch (errorr) {
-            res.status(203).json({ err: true, message: "unexpected API-KEY error", reason: errorr })
+            res.status(403).json({ err: true, message: "unexpected API-KEY error", reason: errorr })
         }
     },
 
@@ -52,7 +52,7 @@ module.exports = {
             }
         } catch (error) {
             console.log(error);
-            res.status(500).json({ err: true, message: "Unexpected errot", err: error })
+            res.status(500).json({ err: true, message: "Unexpected errot", error: error })
         }
     }
 
