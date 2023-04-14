@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
     "lint": "eslint --ignore-path .gitignore . --fix",
-    "format": "prettier --write \"src/**/*.js\""
+    "format": "prettier --write \"{controllers,models,routes,middlewars,utils}/**/*.js\""
   },
   "author": "",
   "license": "ISC",
