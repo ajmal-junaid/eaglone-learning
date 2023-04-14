@@ -1,9 +1,5 @@
 const Category = require('../models/category');
 const { isAnyCourse } = require('./course');
-let objectId = require('mongodb').ObjectId;
-const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
-const { fromUtf8Bytes } = require("@aws-sdk/util-utf8-node");
-const s3 = require('../utils/awsbucket');
 
 module.exports = {
     addCategory: async (req, res) => {

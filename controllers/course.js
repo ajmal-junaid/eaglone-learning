@@ -1,5 +1,4 @@
 const Course = require('../models/course');
-let objectId = require('mongodb').ObjectId;
 
 module.exports = {
     isAnyCourse: async (name) => {
@@ -82,7 +81,7 @@ module.exports = {
             if (!course) return res.status(204).json({ err: true, message: "No course found" })
 
             if (req.file != undefined) {
-                const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_PUBLIC}.s3.amazonaws.com/${req.file.key}` : category.image;
+                const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_PUBLIC}.s3.amazonaws.com/${req.file.key}` : course.image;
                 req.body.image = imageUrl;
             } else {
                 req.body.image = course.image;

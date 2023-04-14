@@ -3,7 +3,6 @@ const Admin = require('../models/admin')
 const User = require('../models/user')
 const Jwt = require('jsonwebtoken')
 const jwtKey = process.env.JWT_TOKEN
-const s3 = require('../utils/awsbucket')
 module.exports = {
     adminLogin: async (req, res) => {
         try {

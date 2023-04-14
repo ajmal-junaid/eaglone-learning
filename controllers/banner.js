@@ -14,7 +14,7 @@ module.exports = {
         try {
             const imageUrl = req.file ? `https://${process.env.AWS_S3_BUCKET_PUBLIC}.s3.amazonaws.com/${req.file.key}` : null;
             const newBanner = new Banner({ image: imageUrl });
-            const savedBanner = await newBanner.save();
+            await newBanner.save();
             res.status(201).json({ err: false, message: "Banner Added successfully" });
         } catch (err) {
             console.error(err);

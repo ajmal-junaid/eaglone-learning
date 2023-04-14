@@ -1,5 +1,4 @@
 const Coupon = require('../models/coupon')
-let objectId = require('mongodb').ObjectId;
 const mongoose = require('mongoose');
 
 module.exports = {
@@ -22,7 +21,7 @@ module.exports = {
                 limit,
                 percentage,
             });
-            const savedCoupon = await newCoupon.save();
+            await newCoupon.save();
             res.status(200).json({ err: false, message: "Coupon added successfully" });
         } catch (error) {
             res.status(500).json({ err: true, message: error.message });

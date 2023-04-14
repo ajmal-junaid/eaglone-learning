@@ -14,7 +14,6 @@ module.exports = {
                 apikey = apikey.split(" ")[1]
                 bcrypt.compare(process.env.VERIFY_KEY, apikey, (error, result) => {
                     if (error) {
-                        console.log(error);
                         res.status(403).json({ err: true, message: "Wrong API-KEY", error })
                     }
                     if (result) {

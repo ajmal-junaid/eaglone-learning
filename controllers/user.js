@@ -8,7 +8,7 @@ const crypto = require('crypto')
 module.exports = {
     userSignup: async (req, res) => {
         try {
-            const { email, mobile, name } = req.body;
+            const { email, mobile } = req.body;
             const userEmail = await User.findOne({ email: email });
             const userPhone = await User.findOne({ mobile: mobile });
             if (userEmail) return res.status(212).json({ success: false, err: true, message: "This Email Is Already Registered" });
@@ -40,7 +40,7 @@ module.exports = {
                     console.log(error);
                     res.json({ err: true, success: false, message: "Failed to send OTP.", });
                 } else {
-                    const newUser = await User.create(req.body);
+                    await User.create(req.body);
                     console.log("Email sent: " + info.response);
                     res.json({ success: true, message: "OTP sent successfully.", data: { key: "not displayable" } });
                 }
