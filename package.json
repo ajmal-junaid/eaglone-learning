@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "lint": "eslint --ignore-path .gitignore . --fix"
   },
   "author": "",
   "license": "ISC",
@@ -30,5 +31,9 @@
     "nodemon": "^2.0.20",
     "socket.io": "^4.6.1",
     "stripe": "^11.16.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.38.0",
+    "eslint-plugin-node": "^11.1.0"
   }
 }

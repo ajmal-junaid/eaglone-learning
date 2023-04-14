@@ -137,7 +137,7 @@ module.exports = {
                 from: process.env.YOUR_EMAIL,
                 to: email,
                 subject: 'Password reset',
-                text: `Please click on the following link to reset your password: http://localhost:3001/user/reset-password/${tokenValue}`,
+                text: `Please click on the following link to reset your password: https://eaglone.online/user/reset-password/${tokenValue}`,
             };
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {

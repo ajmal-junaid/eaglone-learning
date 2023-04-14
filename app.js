@@ -3,16 +3,14 @@ const cors = require('cors')
 const morgan = require('morgan');
 const app = express();
 const http = require('http')
-const { Server } = require('socket.io')
 const server = http.createServer(app);
+require('dotenv').config();
 const { initializeSocket } = require('./utils/socket');
 const PORT = 4000
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan('dev'));
-require('dotenv').config();
 
 initializeSocket(server);
 

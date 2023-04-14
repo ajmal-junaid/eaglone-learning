@@ -2,7 +2,6 @@ const Lesson = require('../models/lesson');
 const { HttpRequest } = require("@aws-sdk/protocol-http");
 const { S3RequestPresigner } = require("@aws-sdk/s3-request-presigner");
 const { parseUrl } = require("@aws-sdk/url-parser");
-const { Sha256 } = require("@aws-crypto/sha256-browser");
 const { Hash } = require("@aws-sdk/hash-node");
 const { formatUrl } = require("@aws-sdk/util-format-url");
 

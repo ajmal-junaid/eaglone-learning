@@ -1,3 +1,3 @@
 const mongoose = require('mongoose');
-const connection = mongoose.createConnection("mongodb+srv://learning-project:cA6JdrkFk82xdKH@atlascluster.nsktbgw.mongodb.net/learning")
+const connection = mongoose.createConnection(process.env.MONGO_URI_LEARNING)
 module.exports = connection;
