@@ -12,6 +12,8 @@ function initializeSocket(server) {
     socket.on('join_room', (data) => {
       joinRoom(data)
       socket.join(data)
+      const roomSize = io.sockets.adapter.rooms.get(data)?.size || 0;
+      io.to(data).emit("room_count", roomSize);
     })
 
     socket.on('send_message', (data) => {
