@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
+    "build": "npm install",
     "lint": "eslint --ignore-path .gitignore . --fix",
     "format": "prettier --write \"{controllers,models,routes,middlewars,utils}/**/*.js\""
   },
