@@ -90,4 +90,3 @@ router.delete('/delete-banner/:id', verifyUser, deleteBanner)
 router.get('/orders', verifyUser, getAllOrders)
 
 module.exports = router
-//fas
