@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const app = express();
 const http = require('http')
 const server = http.createServer(app);
+const helmet = require('helmet')
 require('dotenv').config();
 const { initializeSocket } = require('./utils/socket');
 const PORT = 4000
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan('combined'));
+app.use(helmet())
 
 initializeSocket(server);
 
