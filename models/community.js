@@ -20,7 +20,6 @@ const messageSchema = new mongoose.Schema({
   },
 })
 
-// Define the schema for the rooms
 const communitySchema = new mongoose.Schema({
   roomId: {
     type: String,
@@ -29,7 +28,7 @@ const communitySchema = new mongoose.Schema({
   },
   messages: {
     type: [messageSchema],
-    capped: 1048576, // 1MB capped collection
+    capped: 1048576, // 1MB
   },
 })
 
