@@ -211,7 +211,7 @@ module.exports = {
       const userId = req.token
       const course = await Course.findById(courseId)
       const isRatingExists = course.rating.find(
-        (rating) => rating.user.toString() === userId
+        (rating) => rating?.user?.toString() === userId
       )
       if (isRatingExists)
         return res
